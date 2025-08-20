@@ -1,22 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { WeatherController } from './weather/weather.controller';
+import { WeatherService } from './weather/weather.service';
 
 describe('AppController', () => {
-  let appController: AppController;
+  let weatherController: WeatherController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [WeatherController],
+      providers: [WeatherService],
     }).compile();
 
-    appController = app.get<AppController>(AppController);
+    weatherController = app.get<WeatherController>(WeatherController);
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return weather data from Open Meteo', () => {
     });
   });
 });
