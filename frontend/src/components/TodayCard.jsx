@@ -2,7 +2,7 @@ import Card from "./Card";
 
 const TodayCard = () => {
   return (
-    <div className="flex h-full w-full bg-blue-400">
+    <div className="h-full w-full bg-blue-400">
       <Card />
     </div>
   );
