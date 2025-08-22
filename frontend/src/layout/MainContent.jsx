@@ -4,7 +4,7 @@ import MobileCarousel from "../components/MobileCarousel";
 
 const MainContent = () => {
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full ">
       <div className="hidden md:grid grid-cols-3 h-full w-full">
         <div className="col-span-1 h-full">
           <TodayCard />

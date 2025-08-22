@@ -2,15 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply font-redhat;
+}
+
 html, body, #root {
   height: 100%;
   width: 100%;
   margin: 0;
+  overflow: hidden;
 
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  /* -ms-overflow-style: none;  IE and Edge */
+  /* scrollbar-width: none;     Firefox */
 }
 
 *::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+@font-face {
+  font-family: 'Poiret One';
+  src: url('./assets/fonts/PoiretOne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Red Hat Display';
+  src: url('./assets/fonts/RedHatDisplay-Regular.ttf') format('truetype');
+  font-weight: 600; /* SemiBold */
+  font-style: normal;
+}
+

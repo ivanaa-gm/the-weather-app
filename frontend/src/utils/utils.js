@@ -8,56 +8,90 @@ function isDaytime(currentTimeISO, sunriseISO, sunsetISO) {
 
 function getWeatherIconAndDescription(weatherCode, isDay) {
   const weatherCodes = {
-    0: { key: "clear", title: "Clear" },
-    1: { key: "mostly-clear", title: "Mostly clear" },
-    2: { key: "partly-cloudy", title: "Partly Cloudy" },
-    3: { key: "overcast", title: "Overcast" },
-    45: { key: "fog", title: "Fog" },
-    48: { key: "rime-fog", title: "Rime Fog" },
-    51: { key: "light-drizzle", title: "Light Drizzle" },
-    53: { key: "drizzle", title: "Moderate Drizzle" },
-    55: { key: "drizzle", title: "Dense Drizzle" },
-    56: { key: "light-drizzle", title: "Light Freezing Drizzle" },
-    57: { key: "drizzle", title: "Dense Freezing Drizzle" },
-    61: { key: "slight-rain", title: "Slight Rain" },
-    63: { key: "rain", title: "Moderate Rain" },
-    65: { key: "rain", title: "Heavy Rain" },
-    66: { key: "light-sleet", title: "Light Freezing Rain" },
-    67: { key: "sleet", title: "Heavy Freezing Rain" },
-    71: { key: "light-snow", title: "Slight Snow" },
-    73: { key: "snow", title: "Moderate Snow" },
-    75: { key: "snow", title: "Heavy Snow" },
-    77: { key: "hail", title: "Snow grains" },
-    80: { key: "slight-rain", title: "Slight Rain Showers" },
-    81: { key: "rain", title: "Moderate Rain Showers" },
-    82: { key: "rain", title: "Violent Rain Showers" },
-    85: { key: "light-snow", title: "Slight Snow Showers" },
-    86: { key: "snow", title: "Heavy Snow Showers" },
-    95: { key: "thunderstorm", title: "Thunderstorm" },
-    96: { key: "thunderstorm", title: "Thunderstorm with Hail" },
-    99: { key: "thunderstorm", title: "Thunderstorm with heavy hail" },
-    100: { key: "wind", title: "Windy" },
+    0: { svg: "clear-day", title: "Clear", background: "clear" },
+    1: { svg: "mostly-clear", title: "Mostly clear", background: "clear" },
+    2: {
+      svg: "partly-cloudy",
+      title: "Partly Cloudy",
+      background: "partly-cloudy",
+    },
+    3: { svg: "overcast", title: "Overcast", background: "overcast" },
+    45: { svg: "fog", title: "Fog", background: "fog" },
+    48: { svg: "rime-fog", title: "Rime Fog", background: "fog" },
+    51: { svg: "light-drizzle", title: "Light Drizzle", background: "drizzle" },
+    53: { svg: "drizzle", title: "Moderate Drizzle", background: "drizzle" },
+    55: { svg: "drizzle", title: "Dense Drizzle", background: "drizzle" },
+    56: {
+      svg: "light-drizzle",
+      title: "Light Freezing Drizzle",
+      background: "drizzle",
+    },
+    57: { svg: "drizzle", title: "Dense Freezing Drizzle", background: "drizzle" },
+    61: { svg: "slight-rain", title: "Slight Rain", background: "rain" },
+    63: { svg: "rain", title: "Moderate Rain", background: "rain" },
+    65: { svg: "rain", title: "Heavy Rain", background: "rain" },
+    66: { svg: "light-sleet", title: "Light Freezing Rain", background: "rain" },
+    67: { svg: "sleet", title: "Heavy Freezing Rain", background: "rain" },
+    71: { svg: "light-snow", title: "Slight Snow", background: "snow" },
+    73: { svg: "snow", title: "Moderate Snow", background: "snow" },
+    75: { svg: "snow", title: "Heavy Snow", background: "snow" },
+    77: { svg: "hail", title: "Snow grains", background: "hail" },
+    80: { svg: "slight-rain", title: "Slight Rain Showers", background: "rain" },
+    81: { svg: "rain", title: "Moderate Rain Showers", background: "rain" },
+    82: { svg: "rain", title: "Violent Rain Showers", background: "rain" },
+    85: { svg: "light-snow", title: "Slight Snow Showers", background: "snow" },
+    86: { svg: "snow", title: "Heavy Snow Showers", background: "snow" },
+    95: { svg: "thunderstorm", title: "Thunderstorm", background: "thunderstorm" },
+    96: {
+      svg: "thunderstorm",
+      title: "Thunderstorm with Hail",
+      background: "thunderstorm",
+    },
+    99: {
+      svg: "thunderstorm",
+      title: "Thunderstorm with heavy hail",
+      background: "thunderstorm",
+    },
+    100: { svg: "wind", title: "Windy", background: "wind" },
   };
 
   const weather = weatherCodes[weatherCode];
 
   if (!weather) return null;
 
-  const dayNightSuffix = [
+  const svgDayNightSuffix = [
+    "clear",
     "light-drizzle",
     "slight-rain",
     "light-snow",
     "mostly-clear",
     "partly-cloudy",
-  ].includes(weather.key)
+    "light-sleet",
+  ].includes(weather.svg)
+    ? isDay
+      ? "-day"
+      : "-night"
+    : "";
+
+  const backgroudDayNightSuffix = [
+    "clear",
+    "partly-cloudy",
+    "overcast",
+    "drizzle",
+    "rain",
+    "snow",
+    "thunderstorm",
+    "wind"
+  ].includes(weather.background)
     ? isDay
       ? "-day"
       : "-night"
     : "";
 
   return {
-    key: weather.key + dayNightSuffix,
+    svg: weather.svg + svgDayNightSuffix,
     title: weather.title,
+    background: weather.background + backgroudDayNightSuffix,
   };
 }
 
