@@ -6,10 +6,10 @@ function isDaytime(currentTimeISO, sunriseISO, sunsetISO) {
   return now >= sunrise && now <= sunset;
 }
 
-function getWeatherIconAndDescription(weatherCode, isDay) {
+function getWeatherIconBackgroundAndDescription(weatherCode, isDay) {
   const weatherCodes = {
-    0: { svg: "clear-day", title: "Clear", background: "clear" },
-    1: { svg: "mostly-clear", title: "Mostly clear", background: "clear" },
+    0: { svg: "clear", title: "Clear", background: "clear" },
+    1: { svg: "mostly-clear", title: "Mostly Clear", background: "clear" },
     2: {
       svg: "partly-cloudy",
       title: "Partly Cloudy",
@@ -26,22 +26,38 @@ function getWeatherIconAndDescription(weatherCode, isDay) {
       title: "Light Freezing Drizzle",
       background: "drizzle",
     },
-    57: { svg: "drizzle", title: "Dense Freezing Drizzle", background: "drizzle" },
+    57: {
+      svg: "drizzle",
+      title: "Dense Freezing Drizzle",
+      background: "drizzle",
+    },
     61: { svg: "slight-rain", title: "Slight Rain", background: "rain" },
     63: { svg: "rain", title: "Moderate Rain", background: "rain" },
     65: { svg: "rain", title: "Heavy Rain", background: "rain" },
-    66: { svg: "light-sleet", title: "Light Freezing Rain", background: "rain" },
+    66: {
+      svg: "light-sleet",
+      title: "Light Freezing Rain",
+      background: "rain",
+    },
     67: { svg: "sleet", title: "Heavy Freezing Rain", background: "rain" },
     71: { svg: "light-snow", title: "Slight Snow", background: "snow" },
     73: { svg: "snow", title: "Moderate Snow", background: "snow" },
     75: { svg: "snow", title: "Heavy Snow", background: "snow" },
     77: { svg: "hail", title: "Snow grains", background: "hail" },
-    80: { svg: "slight-rain", title: "Slight Rain Showers", background: "rain" },
+    80: {
+      svg: "slight-rain",
+      title: "Slight Rain Showers",
+      background: "rain",
+    },
     81: { svg: "rain", title: "Moderate Rain Showers", background: "rain" },
     82: { svg: "rain", title: "Violent Rain Showers", background: "rain" },
     85: { svg: "light-snow", title: "Slight Snow Showers", background: "snow" },
     86: { svg: "snow", title: "Heavy Snow Showers", background: "snow" },
-    95: { svg: "thunderstorm", title: "Thunderstorm", background: "thunderstorm" },
+    95: {
+      svg: "thunderstorm",
+      title: "Thunderstorm",
+      background: "thunderstorm",
+    },
     96: {
       svg: "thunderstorm",
       title: "Thunderstorm with Hail",
@@ -81,7 +97,7 @@ function getWeatherIconAndDescription(weatherCode, isDay) {
     "rain",
     "snow",
     "thunderstorm",
-    "wind"
+    "wind",
   ].includes(weather.background)
     ? isDay
       ? "-day"
@@ -95,4 +111,51 @@ function getWeatherIconAndDescription(weatherCode, isDay) {
   };
 }
 
-export { isDaytime, getWeatherIconAndDescription };
+function formatDate(dateString) {
+  const date = new Date(dateString);
+
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+  }).format(date);
+}
+
+function getWindDirection(degrees) {
+  const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+  const index = Math.round(degrees / 45) % 8;
+  return directions[index];
+}
+
+function filterFutureHours(hourlyWeather) {
+  // const now = new Date();
+  const now = new Date("2025-08-20T15:00:00");
+
+  const futureEntries = Object.entries(hourlyWeather).filter(([time]) => {
+    return new Date(time) > now;
+  });
+
+  return Object.fromEntries(futureEntries);
+}
+
+function extractTime(dateTimeString) {
+  return dateTimeString.split("T")[1];
+}
+
+function secondsToHours(seconds) {
+  const totalMinutes = Math.floor(seconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${hours}h ${minutes}m`;
+}
+
+export {
+  isDaytime,
+  getWeatherIconBackgroundAndDescription,
+  formatDate,
+  getWindDirection,
+  filterFutureHours,
+  extractTime,
+  secondsToHours,
+};

@@ -1,4 +1,8 @@
-import { getWeatherIconAndDescription } from "../utils/utils";
+import {
+  getWeatherIconBackgroundAndDescription,
+  getWindDirection,
+  extractTime
+} from "../utils/utils";
 
 const HourlyWeatherCard = ({
   time,
@@ -11,28 +15,34 @@ const HourlyWeatherCard = ({
   windSpeed,
   windDirection,
   cloudCover,
+  isToday,
 }) => {
-  const iconAndTitle = getWeatherIconAndDescription(weatherCode, true);
-  const imgPath = `/weather-icons/${iconAndTitle.key}.svg`;
+  const iconAndTitle = getWeatherIconBackgroundAndDescription(
+    weatherCode,
+    true
+  );
+  const imgPath = `/weather-icons/${iconAndTitle.svg}.svg`;
+  const windDirectionString = getWindDirection(windDirection);
 
   return (
     <div
       key={time}
-      className="flex flex-col items-center min-w-[140px] bg-green-300 rounded-xl p-2 m-2 gap-2 text-sm"
+      className={isToday ? "flex flex-col items-center min-w-[140px] gap-2 border-black/10 shadow-xl bg-transparent/15 rounded-xl p-2 m-1 text-sm transition duration-400 ease-in-out transform hover:ring-1 hover:ring-white/30 hover:ring-offset-0 hover:shadow-white/40"
+         : "flex flex-col items-center min-w-[140px] gap-0.5 border-black/10 shadow-xl bg-transparent/15 rounded-xl p-1 m-0.5 text-sm transition duration-400 ease-in-out transform hover:ring-0.5 hover:ring-white/30 hover:ring-offset-0 hover:shadow-white/40"}
     >
-      <p className="text-sm">{time.split("T")[1]}</p>
-      <img src={imgPath} alt={iconAndTitle.title} className="h-10" />
-      <p className="text-lg font-poiret font-semibold">{temperature}°C</p>
-      <p className="">{iconAndTitle.title}</p>
-      <p className="">Feels like {apparentTemperature}°C</p>
+      <p className={isToday ? "text-xl" : "text-lg"}>{extractTime(time)}</p>
+      <img src={imgPath} alt={iconAndTitle.title} className={isToday ? "h-16" : "h-12"} />
+      <p className={isToday ? "text-2xl font-poiret font-semibold" : "text-xl font-poiret font-semibold"}>{temperature}°C</p>
+      <p className={isToday ? "text-xl" : "text-lg"}>{iconAndTitle.title}</p>
+      <p className="text-black/60">Apparent {apparentTemperature}°C</p>
       <div className="flex flex-row items-center">
         <img
           src="/weather-icons/raindrops.svg"
           alt="precipitation"
-          className="h-6"
+          className={isToday ? "h-14" : "h-10"}
         />
-        <div>
-          <p>{precipitation}mm</p>
+        <div className={isToday ? "text-lg" : "text-sm"}>
+          <p>{precipitation} mm</p>
           <p>{precipitationProbability}%</p>
         </div>
       </div>
@@ -40,25 +50,27 @@ const HourlyWeatherCard = ({
         <img
           src="/weather-icons/uv-index.svg"
           alt="UV Index"
-          className="h-6"
+          className={isToday ? "h-12" : "h-8"}
         />
-          <p>{UVindex}</p>
+        <p className={isToday ? "text-lg" : "text-sm"}>{UVindex}</p>
       </div>
       <div className="flex flex-row items-center">
         <img
           src="/weather-icons/cloud.svg"
-          alt="UV Index"
-          className="h-6"
+          alt="Clouds Cover"
+          className={isToday ? "h-14" : "h-10"}
         />
-          <p>{cloudCover} %</p>
+        <p className={isToday ? "text-lg" : "text-sm"}>{cloudCover}%</p>
       </div>
       <div className="flex flex-row items-center">
         <img
           src="/weather-icons/dust-wind.svg"
           alt="UV Index"
-          className="h-6"
+          className={isToday ? "h-12" : "h-8"}
         />
-          <p>{windSpeed}m/s {windDirection}</p>
+        <p className={isToday ? "text-lg" : "text-sm"}>
+          {windSpeed}m/s {windDirectionString}
+        </p>
       </div>
     </div>
   );

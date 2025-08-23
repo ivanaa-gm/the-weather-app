@@ -1,6 +1,14 @@
 import exampleData from "../../exampleData";
 
-const {current: currentWeather, daily, hourly, latitude, longitude, timezone_abbreviation: timezone, elevation} = exampleData;
+const {
+  current: currentWeather,
+  daily,
+  hourly,
+  latitude,
+  longitude,
+  timezone_abbreviation: timezone,
+  elevation,
+} = exampleData;
 
 function transformHourlyData(hourly) {
   const days = {};
@@ -11,7 +19,15 @@ function transformHourlyData(hourly) {
     days[date][time] = data;
   });
 
-  const labels = ["today", "dayOne", "dayTwo", "dayThree", "dayFour", "dayFive", "daySix"];
+  const labels = [
+    "today",
+    "dayOne",
+    "dayTwo",
+    "dayThree",
+    "dayFour",
+    "dayFive",
+    "daySix",
+  ];
   const dates = Object.keys(days).sort();
 
   const result = {};
@@ -25,7 +41,15 @@ function transformHourlyData(hourly) {
 }
 
 function transformDailyData(daily) {
-  const labels = ["today", "dayOne", "dayTwo", "dayThree", "dayFour", "dayFive", "daySix"];
+  const labels = [
+    "today",
+    "dayOne",
+    "dayTwo",
+    "dayThree",
+    "dayFour",
+    "dayFive",
+    "daySix",
+  ];
   const dates = Object.keys(daily).sort();
 
   const result = {};
@@ -33,7 +57,7 @@ function transformDailyData(daily) {
     if (dates[idx]) {
       result[label] = {
         date: dates[idx],
-        ...daily[dates[idx]]
+        ...daily[dates[idx]],
       };
     }
   });
@@ -44,4 +68,36 @@ function transformDailyData(daily) {
 const hourlyWeather = transformHourlyData(hourly);
 const dailyWeather = transformDailyData(daily);
 
-export {currentWeather, dailyWeather, hourlyWeather, timezone, latitude, longitude, elevation};
+const hourlyWeatherToday = hourlyWeather.today;
+const hourlyWeatherFutureDays = {
+  dayOne: hourlyWeather.dayOne,
+  dayTwo: hourlyWeather.dayTwo,
+  dayThree: hourlyWeather.dayThree,
+  dayFour: hourlyWeather.dayFour,
+  dayFive: hourlyWeather.dayFive,
+  daySix: hourlyWeather.daySix,
+};
+
+const dailyWeatherToday = dailyWeather.today;
+const dailyWeatherFutureDays = {
+  dayOne: dailyWeather.dayOne,
+  dayTwo: dailyWeather.dayTwo,
+  dayThree: dailyWeather.dayThree,
+  dayFour: dailyWeather.dayFour,
+  dayFive: dailyWeather.dayFive,
+  daySix: dailyWeather.daySix,
+};
+
+export {
+  currentWeather,
+  dailyWeather,
+  dailyWeatherToday,
+  dailyWeatherFutureDays,
+  hourlyWeather,
+  hourlyWeatherToday,
+  hourlyWeatherFutureDays,
+  timezone,
+  latitude,
+  longitude,
+  elevation,
+};

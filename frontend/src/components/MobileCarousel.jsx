@@ -1,9 +1,12 @@
 import { useState } from "react";
 import TodayCard from "./TodayCard";
-import Card from "./Card";
+import TodayWeatherCard from "./TodayWeatherCard";
 
 const MobileCarousel = () => {
-  const cards = [<TodayCard key="today" />, ...Array.from({ length: 6 }, (_, i) => <Card key={i} />)];
+  const cards = [
+    <TodayCard key="today" />,
+    ...Array.from({ length: 6 }, (_, i) => <TodayWeatherCard key={i} />),
+  ];
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleScroll = (e) => {
