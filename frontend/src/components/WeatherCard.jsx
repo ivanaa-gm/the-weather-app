@@ -8,14 +8,20 @@ import {
 import HourlyWeatherCard from "./HourlyWeatherCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { CircleLoader } from "react-spinners";
+import { useTranslation } from "react-i18next";
+import { useMetrics } from "../contexts/MetricsContext";
 
 const WeatherCard = ({
   dailyWeather = null,
   hourlyWeather = null,
   icon = "",
   title = "",
+  code = 0,
   background = "",
 }) => {
+  const { t, i18n } = useTranslation();
+  const { metrics } = useMetrics();
+
   if (!dailyWeather || !hourlyWeather) {
     return (
       <div className="flex h-full w-full items-center justify-center">
@@ -27,8 +33,9 @@ const WeatherCard = ({
   const imgPath = `/weather-icons/${icon}.svg`;
   const bgPath = `/bg-gifs/${background}.gif`;
 
-  const date = formatDate(dailyWeather.date);
+  const { weekday, day, month } = formatDate(dailyWeather.date);
   const windDirection = getWindDirection(dailyWeather.wind_speed_10m_max);
+  const daylight = secondsToHours(dailyWeather.daylight_duration);
 
   return (
     <div
@@ -37,8 +44,15 @@ const WeatherCard = ({
     >
       <div className="flex flex-col items-center">
         <div className="flex flex-col items-center">
-          <div className="mt-2">{date}</div>
-          <img src={imgPath} alt={title} title={title} className="-translate-y-4 h-36" />
+          <div className="mt-4">
+            {t(`days.${weekday}`)}, {day} {t(`months.${month}`)}
+          </div>
+          <img
+            src={imgPath}
+            alt={title}
+            title={title}
+            className="-translate-y-4 h-36"
+          />
         </div>
         <div className="flex flex-row -translate-y-8">
           <div className="flex flex-row items-center">
@@ -48,7 +62,7 @@ const WeatherCard = ({
               className="h-10"
             />
             <p className="font-bold font-poiret text-[#7d0f0f]">
-              {dailyWeather.temperature_2m_max}°C
+              {dailyWeather.temperature_2m_max}°{metrics.temperature}
             </p>
           </div>
           <div className="flex flex-row items-center">
@@ -58,21 +72,23 @@ const WeatherCard = ({
               className="h-10"
             />
             <p className="font-bold font-poiret text-[#093F58]">
-              {dailyWeather.temperature_2m_min}°C
+              {dailyWeather.temperature_2m_min}°{metrics.temperature}
             </p>
           </div>
         </div>
-        <h1 className="text-xl -translate-y-8">{title}</h1>
+        <h1 className="text-xl -translate-y-8">{t(`weatherCodes.${code}`)}</h1>
         <div className="flex flex-col items-center -translate-y-4">
           <div className="flex flex-col items-center">
-            <div>Precipitation</div>
-            <div className="flex flex-row items-center font-bold -translate-x-1">
+            <div>{t("precipitation")}</div>
+            <div className="flex flex-row items-center -translate-x-1">
               <img
-              src="/weather-icons/raindrops.svg"
-              alt="precipitation"
-              className="h-8"
-            />
-              <p>{dailyWeather.precipitation_sum}mm</p>
+                src="/weather-icons/raindrops.svg"
+                alt="precipitation"
+                className="h-8"
+              />
+              <p>
+                {dailyWeather.precipitation_sum} {t(`${metrics.precipitation}`)}
+              </p>
             </div>
           </div>
           <div className="flex flex-row items-center -translate-y-1">
@@ -82,13 +98,13 @@ const WeatherCard = ({
               className="h-8"
             />
             <div className="flex flex-row gap-2 text-sm text-black/80">
-              <div>Chance of Rain:</div>
+              <div>{t("chanceOfRain")}:</div>
               <p>{dailyWeather.precipitation_probability_max}%</p>
             </div>
           </div>
         </div>
         <div className="flex flex-col items-center mt-2 -translate-y-4">
-          <div>Wind</div>
+          <div>{t("wind")}</div>
           <div className="flex flex-row items-center -translate-x-2">
             <img
               src="/weather-icons/dust-wind.svg"
@@ -96,7 +112,8 @@ const WeatherCard = ({
               className="h-10"
             />
             <p className="-translate-y-1">
-              {dailyWeather.wind_speed_10m_max}m/s {windDirection}
+              {dailyWeather.wind_speed_10m_max} {t(`${metrics.windSpeed}`)}{" "}
+              {t(`directions.${windDirection}`)}
             </p>
           </div>
         </div>
@@ -128,16 +145,20 @@ const WeatherCard = ({
               className="h-10"
             />
             <p className="font-semibold font-poiret">
-              {secondsToHours(dailyWeather.daylight_duration)}
+              {daylight.hours}
+              {t("h")} {daylight.minutes}
+              {t("m")}
             </p>
           </div>
-          <div className="flex flex-col items-center w-20 border-r p-2 border-white/40">
+          <div className="flex flex-col items-center text-[90%] w-20 border-r p-2 border-white/40">
             <img
               src="/weather-icons/starry-night.svg"
               alt="Moon Phase"
               className="h-10"
             />
-            <p className="font-semibold font-poiret">Crescent</p>
+            <p className="font-semibold font-poiret">
+              {t(`moonPhases.fullMoon`)}
+            </p>
           </div>
         </div>
       </div>

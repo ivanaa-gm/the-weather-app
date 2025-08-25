@@ -3,6 +3,8 @@ import {
   getWindDirection,
   extractTime
 } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import { useMetrics } from "../contexts/MetricsContext";
 
 const HourlyWeatherCard = ({
   time,
@@ -17,6 +19,9 @@ const HourlyWeatherCard = ({
   cloudCover,
   isToday,
 }) => {
+  const { t, i18n } = useTranslation();
+  const {metrics} = useMetrics();
+
   const iconAndTitle = getWeatherIconBackgroundAndDescription(
     weatherCode,
     true
@@ -32,9 +37,9 @@ const HourlyWeatherCard = ({
     >
       <p className={isToday ? "text-xl" : "text-lg"}>{extractTime(time)}</p>
       <img src={imgPath} alt={iconAndTitle.title} className={isToday ? "h-16" : "h-12"} />
-      <p className={isToday ? "text-2xl font-poiret font-semibold" : "text-xl font-poiret font-semibold"}>{temperature}°C</p>
+      <p className={isToday ? "text-2xl font-poiret font-semibold" : "text-xl font-poiret font-semibold"}>{temperature}°{metrics.temperature}</p>
       <p className={isToday ? "text-xl" : "text-lg"}>{iconAndTitle.title}</p>
-      <p className="text-black/60">Apparent {apparentTemperature}°C</p>
+      <p className="text-black/60">{t("apparent")} {apparentTemperature}°{metrics.temperature}</p>
       <div className="flex flex-row items-center">
         <img
           src="/weather-icons/raindrops.svg"
@@ -42,7 +47,7 @@ const HourlyWeatherCard = ({
           className={isToday ? "h-14" : "h-10"}
         />
         <div className={isToday ? "text-lg" : "text-sm"}>
-          <p>{precipitation} mm</p>
+          <p>{precipitation} {t(`${metrics.precipitation}`)}</p>
           <p>{precipitationProbability}%</p>
         </div>
       </div>
@@ -69,7 +74,7 @@ const HourlyWeatherCard = ({
           className={isToday ? "h-12" : "h-8"}
         />
         <p className={isToday ? "text-lg" : "text-sm"}>
-          {windSpeed}m/s {windDirectionString}
+          {windSpeed} {t(`${metrics.windSpeed}`)} {t(`directions.${windDirectionString}`)}
         </p>
       </div>
     </div>

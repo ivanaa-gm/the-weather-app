@@ -35,7 +35,7 @@ const TodayCard = () => {
         dailyWeather={dailyWeatherToday}
         hourlyWeather={hourlyWeatherToday}
         icon={iconTitleBackground.svg}
-        title={iconTitleBackground.title}
+        code={iconTitleBackground.code}
         background={iconTitleBackground.background}
         isToday={true}
       />

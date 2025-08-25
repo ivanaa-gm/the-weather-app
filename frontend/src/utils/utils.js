@@ -106,7 +106,7 @@ function getWeatherIconBackgroundAndDescription(weatherCode, isDay) {
 
   return {
     svg: weather.svg + svgDayNightSuffix,
-    title: weather.title,
+    code: weatherCode,
     background: weather.background + backgroudDayNightSuffix,
   };
 }
@@ -114,17 +114,23 @@ function getWeatherIconBackgroundAndDescription(weatherCode, isDay) {
 function formatDate(dateString) {
   const date = new Date(dateString);
 
-  return new Intl.DateTimeFormat("en-US", {
-    weekday: "short",
-    day: "2-digit",
-    month: "short",
-  }).format(date);
+  const weekday = date
+    .toLocaleDateString("en-US", { weekday: "short" })
+    .toLowerCase();
+
+  const day = date.toLocaleDateString("en-US", { day: "2-digit" });
+
+  const month = date
+    .toLocaleDateString("en-US", { month: "short" })
+    .toLowerCase();
+
+  return { weekday, day, month };
 }
 
 function getWindDirection(degrees) {
   const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
   const index = Math.round(degrees / 45) % 8;
-  return directions[index];
+  return directions[index].toLowerCase();
 }
 
 function filterFutureHours(hourlyWeather) {
@@ -147,7 +153,9 @@ function secondsToHours(seconds) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 
-  return `${hours}h ${minutes}m`;
+  return {
+    hours, minutes
+  }
 }
 
 export {

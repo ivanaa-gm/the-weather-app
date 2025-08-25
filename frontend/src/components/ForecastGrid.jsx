@@ -19,7 +19,7 @@ const ForecastGrid = () => {
             dailyWeather={Object.entries(dailyWeatherFutureDays)[i][1]}
             hourlyWeather={Object.entries(hourlyWeatherFutureDays)[i][1]}
             icon={iconsTitlesBackgrouds[i].svg}
-            title={iconsTitlesBackgrouds[i].title}
+            code={iconsTitlesBackgrouds[i].code}
             background={iconsTitlesBackgrouds[i].background}
           />
         </div>
