@@ -76,8 +76,8 @@ const WeatherCard = ({
             </p>
           </div>
         </div>
-        <h1 className="text-xl -translate-y-8">{t(`weatherCodes.${code}`)}</h1>
-        <div className="flex flex-col items-center -translate-y-4">
+        <h1 className="text-2xl font-bold -translate-y-8">{t(`weatherCodes.${code}`)}</h1>
+        <div className="flex flex-col items-center -translate-y-5">
           <div className="flex flex-col items-center">
             <div>{t("precipitation")}</div>
             <div className="flex flex-row items-center -translate-x-1">
@@ -103,7 +103,7 @@ const WeatherCard = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center mt-2 -translate-y-4">
+        <div className="flex flex-col items-center mt-2 -translate-y-5">
           <div>{t("wind")}</div>
           <div className="flex flex-row items-center -translate-x-2">
             <img
@@ -118,7 +118,7 @@ const WeatherCard = ({
           </div>
         </div>
         <div className="flex flex-row mt-4 -translate-y-4">
-          <div className="flex flex-col items-center w-20 border-x p-2 border-white/40">
+          <div className="flex flex-col items-center border-x p-2 border-white/40">
             <img
               src="/weather-icons/sunrise.svg"
               alt="Sunrise"
@@ -128,7 +128,7 @@ const WeatherCard = ({
               {extractTime(dailyWeather.sunrise)}
             </p>
           </div>
-          <div className="flex flex-col items-center w-20 border-r p-2 border-white/40">
+          <div className="flex flex-col items-center border-r p-2 border-white/40">
             <img
               src="/weather-icons/sunset.svg"
               alt="Sunset"
@@ -138,7 +138,7 @@ const WeatherCard = ({
               {extractTime(dailyWeather.sunset)}
             </p>
           </div>
-          <div className="flex flex-col items-center w-20 border-r p-2 border-white/40">
+          <div className="flex flex-col items-center border-r p-2 border-white/40">
             <img
               src="/weather-icons/horizon.svg"
               alt="Daylight"
@@ -150,7 +150,7 @@ const WeatherCard = ({
               {t("m")}
             </p>
           </div>
-          <div className="flex flex-col items-center text-[90%] w-20 border-r p-2 border-white/40">
+          <div className="flex flex-col items-center text-[90%] border-r p-2 border-white/40">
             <img
               src="/weather-icons/starry-night.svg"
               alt="Moon Phase"

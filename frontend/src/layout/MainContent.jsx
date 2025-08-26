@@ -14,7 +14,6 @@ const MainContent = () => {
         </div>
       </div>
 
-      {/* mobile */}
       <div className="md:hidden h-full w-full">
         <MobileCarousel />
       </div>

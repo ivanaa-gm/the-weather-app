@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily: {
         poiret: ['"Poiret One"', 'cursive'],
-        redhat: ['"Red Hat Display"', 'sans-serif'], 
+        nunito: ['"Nunito"', 'sans-serif'], 
       },
     },
   },

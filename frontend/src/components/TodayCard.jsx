@@ -3,10 +3,6 @@ import {
   currentWeather,
   dailyWeatherToday,
   hourlyWeatherToday,
-  timezone,
-  latitude,
-  longitude,
-  elevation,
 } from "../utils/api";
 import {
   getWeatherIconBackgroundAndDescription,

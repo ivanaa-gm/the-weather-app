@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply font-redhat;
+  @apply font-nunito;
 }
 
 html, body, #root {
@@ -29,9 +29,9 @@ html, body, #root {
 }
 
 @font-face {
-  font-family: 'Red Hat Display';
-  src: url('./assets/fonts/RedHatDisplay-Regular.ttf') format('truetype');
-  font-weight: 600; /* SemiBold */
+  font-family: 'Nunito';
+  src: url('./assets/fonts/Nunito-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
   font-style: normal;
 }
 

@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { CircleLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../contexts/MetricsContext";
+import PlaceInformation from "./PlaceInformation";
 
 const TodayWeatherCard = ({
   currentWeather = null,
@@ -44,24 +45,38 @@ const TodayWeatherCard = ({
       className="h-full w-full overflow-y-auto bg-cover bg-center border-4 border-transparent shadow-lg"
       style={{ backgroundImage: `url(${bgPath})` }}
     >
-      <div className="flex flex-col items-center">
-        <div className="flex flex-col items-center">
-          <div className="mt-4">
-            {t(`days.${weekday}`)}, {day} {t(`months.${month}`)}
+      <div className="flex flex-col items-center w-full">
+        <div className="flex flex-row w-full justify-between items-start">
+          <div className="pointer-events-none opacity-0">
+            <PlaceInformation />
           </div>
-          <img
-            src={imgPath}
-            alt={t(`weatherCodes.${code}`)}
-            title={t(`weatherCodes.${code}`)}
-            className="h-60 -translate-y-6"
-          />
+          <div className="flex justify-center">
+            <div className="flex flex-col items-center">
+              <div className="mt-6">
+                {t(`days.${weekday}`)}, {day} {t(`months.${month}`)}
+              </div>
+              <img
+                src={imgPath}
+                alt={t(`weatherCodes.${code}`)}
+                title={t(`weatherCodes.${code}`)}
+                className="h-60 -translate-y-6"
+              />
+            </div>
+          </div>
+          <div>
+            <PlaceInformation />
+          </div>
         </div>
+
         <h1 className="text-5xl font-semibold font-poiret -translate-y-10">
           {currentWeather.temperature_2m}°{metrics.temperature}
         </h1>
-        <h1 className="text-3xl -translate-y-6">{t(`weatherCodes.${code}`)}</h1>
+        <h1 className="text-3xl font-bold -translate-y-6">
+          {t(`weatherCodes.${code}`)}
+        </h1>
         <div className="text-xl text-black/60 -translate-y-6">
-          {t("feelsLike")} {currentWeather.apparent_temperature}°{metrics.temperature}
+          {t("feelsLike")} {currentWeather.apparent_temperature}°
+          {metrics.temperature}
         </div>
         <div className="flex flex-row gap-4 text-xl -translate-y-6">
           <div className="flex flex-row items-center">
@@ -99,8 +114,7 @@ const TodayWeatherCard = ({
                 className="h-10"
               />
               <p className="">
-                {currentWeather.precipitation} {" "}
-                {t(`${metrics.precipitation}`)}
+                {currentWeather.precipitation} {t(`${metrics.precipitation}`)}
               </p>
             </div>
           </div>
@@ -152,8 +166,8 @@ const TodayWeatherCard = ({
             </p>
           </div>
         </div>
-        <div className="flex flex-row my-4">
-          <div className="flex flex-col items-center w-28 border-x p-2 border-white/40">
+        <div className="flex flex-row my-4 gap-2">
+          <div className="flex flex-col items-center border-x p-2 border-white/40">
             <img
               src="/weather-icons/sunrise.svg"
               alt="Sunrise"
@@ -163,7 +177,7 @@ const TodayWeatherCard = ({
               {extractTime(dailyWeather.sunrise)}
             </p>
           </div>
-          <div className="flex flex-col items-center w-28 border-r p-2 border-white/40">
+          <div className="flex flex-col items-center border-r p-2 border-white/40">
             <img
               src="/weather-icons/sunset.svg"
               alt="Sunset"
@@ -173,7 +187,7 @@ const TodayWeatherCard = ({
               {extractTime(dailyWeather.sunset)}
             </p>
           </div>
-          <div className="flex flex-col items-center w-28 border-r p-2 border-white/40">
+          <div className="flex flex-col items-center border-r p-2 border-white/40">
             <img
               src="/weather-icons/horizon.svg"
               alt="Daylight"
@@ -185,7 +199,7 @@ const TodayWeatherCard = ({
               {t("m")}
             </p>
           </div>
-          <div className="flex flex-col items-center w-28 border-r p-2 border-white/40">
+          <div className="flex flex-col items-center border-r p-2 border-white/40">
             <img
               src="/weather-icons/starry-night.svg"
               alt="Moon Phase"

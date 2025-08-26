@@ -154,8 +154,15 @@ function secondsToHours(seconds) {
   const minutes = totalMinutes % 60;
 
   return {
-    hours, minutes
-  }
+    hours,
+    minutes,
+  };
+}
+
+function formatCoordinates(coord) {
+  const degrees = Math.floor(coord);
+  const minutes = Math.floor((coord - degrees) * 60);
+  return `${degrees}°${minutes}'`;
 }
 
 export {
@@ -166,4 +173,5 @@ export {
   filterFutureHours,
   extractTime,
   secondsToHours,
+  formatCoordinates,
 };
