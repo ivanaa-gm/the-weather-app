@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
-export interface WeatherResponse {
+export interface FullWeatherResponse {
+  location?: string;
   latitude: number;
   longitude: number;
-  timezone_abbreviation: string;
+  timezone: string;
   elevation: number;
-  current: {
+  currentWeather: {
     time: string;
-    interval: number;
     temperature_2m: number;
     relative_humidity_2m: number;
     apparent_temperature: number;
@@ -20,7 +21,37 @@ export interface WeatherResponse {
     wind_speed_10m: number;
     wind_direction_10m: number;
   };
-  hourly: {
+  dailyWeatherToday: {
+    date: string;
+    weather_code: number;
+    temperature_2m_max: number;
+    temperature_2m_min: number;
+    sunrise: string;
+    sunset: string;
+    daylight_duration: number;
+    uv_index_max: number;
+    precipitation_probability_max: number;
+    wind_speed_10m_max: number;
+    precipitation_sum: number;
+    wind_direction_10m_dominant: number;
+  };
+  dailyWeatherFutureDays: {
+    [day: string]: {
+      date: string;
+      weather_code: number;
+      temperature_2m_max: number;
+      temperature_2m_min: number;
+      sunrise: string;
+      sunset: string;
+      daylight_duration: number;
+      uv_index_max: number;
+      precipitation_probability_max: number;
+      wind_speed_10m_max: number;
+      precipitation_sum: number;
+      wind_direction_10m_dominant: number;
+    };
+  };
+  hourlyWeatherToday: {
     [timestamp: string]: {
       temperature_2m: number;
       apparent_temperature: number;
@@ -33,19 +64,61 @@ export interface WeatherResponse {
       precipitation: number;
     };
   };
-  daily: {
-    [date: string]: {
+  hourlyWeatherFutureDays: {
+    [day: string]: {
+      [timestamp: string]: {
+        temperature_2m: number;
+        apparent_temperature: number;
+        precipitation_probability: number;
+        weather_code: number;
+        uv_index: number;
+        wind_speed_10m: number;
+        wind_direction_10m: number;
+        cloud_cover: number;
+        precipitation: number;
+      };
+    };
+  };
+}
+
+export interface TodayWeatherResponse {
+  currentWeather: {
+    time: string;
+    temperature_2m: number;
+    relative_humidity_2m: number;
+    apparent_temperature: number;
+    precipitation: number;
+    weather_code: number;
+    cloud_cover: number;
+    surface_pressure: number;
+    wind_speed_10m: number;
+    wind_direction_10m: number;
+  };
+  dailyWeatherToday: {
+    date: string;
+    weather_code: number;
+    temperature_2m_max: number;
+    temperature_2m_min: number;
+    sunrise: string;
+    sunset: string;
+    daylight_duration: number;
+    uv_index_max: number;
+    precipitation_probability_max: number;
+    wind_speed_10m_max: number;
+    precipitation_sum: number;
+    wind_direction_10m_dominant: number;
+  };
+  hourlyWeatherToday: {
+    [timestamp: string]: {
+      temperature_2m: number;
+      apparent_temperature: number;
+      precipitation_probability: number;
       weather_code: number;
-      temperature_2m_max: number;
-      temperature_2m_min: number;
-      sunrise: string;
-      sunset: string;
-      daylight_duration: number;
-      uv_index_max: number;
-      precipitation_probability_max: number;
-      wind_speed_10m_max: number;
-      precipitation_sum: number;
-      wind_direction_10m_dominant: number;
+      uv_index: number;
+      wind_speed_10m: number;
+      wind_direction_10m: number;
+      cloud_cover: number;
+      precipitation: number;
     };
   };
 }
@@ -63,24 +136,108 @@ export class WeatherService {
       throw new Error('Location not found');
     }
 
-    const { latitude, longitude } = response.data.results[0];
-    return { latitude, longitude };
+    const { latitude, longitude, timezone } = response.data.results[0];
+    console.log('Timezone: ' + timezone);
+    return { latitude, longitude, timezone };
   }
 
-  async getWeather(city: string): Promise<WeatherResponse> {
-    const coordinates = await this.getLocationCoordinates(city);
-    const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,daylight_duration,uv_index_max,precipitation_probability_max,wind_speed_10m_max,precipitation_sum,wind_direction_10m_dominant&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,uv_index,wind_speed_10m,wind_direction_10m,cloud_cover,precipitation&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_direction_10m`;
+  async getWeather(
+    latitude: string,
+    longitude: string,
+    timezone: string,
+    location?: string,
+  ): Promise<FullWeatherResponse> {
+    //TODO: add metrics to the api url: wind speed, temperature, precipitation
+    const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,daylight_duration,uv_index_max,precipitation_probability_max,wind_speed_10m_max,precipitation_sum,wind_direction_10m_dominant&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,uv_index,wind_speed_10m,wind_direction_10m,cloud_cover,precipitation&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_direction_10m&timezone=${encodeURIComponent(timezone)}&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm`;
 
-    const response = await firstValueFrom(this.httpService.get(weatherApiUrl));
-    const data = response.data;
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(weatherApiUrl),
+      );
+      const data = response.data;
 
-    return this.transformWeather(data);
+      let result = {
+        location: location,
+        ...this.transformWeather(data),
+      };
+
+      result = this.roundTemperatures(result);
+      result = this.markWindy(result, 'ms');
+
+      return result;
+    } catch (error) {
+      throw new HttpException(
+        error.response?.data || 'Error fetching weather data from Open Meteo API.',
+        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getTodayWeather(
+    latitude: string,
+    longitude: string,
+    timezone: string,
+  ): Promise<TodayWeatherResponse> {
+    const { currentWeather, dailyWeatherToday, hourlyWeatherToday } =
+      await this.getWeather(latitude, longitude, timezone);
+
+    return {
+      currentWeather,
+      dailyWeatherToday,
+      hourlyWeatherToday,
+    };
   }
 
   transformWeather(data: any) {
     const { hourly, daily } = data;
 
-    // Transform hourly for even hours
+    const hourlyWeather = this.transformHourlyData(hourly);
+    const dailyWeather = this.transformDailyData(daily);
+
+    const hourlyWeatherToday = hourlyWeather.today;
+    const hourlyWeatherFutureDays = {
+      dayOne: hourlyWeather.dayOne,
+      dayTwo: hourlyWeather.dayTwo,
+      dayThree: hourlyWeather.dayThree,
+      dayFour: hourlyWeather.dayFour,
+      dayFive: hourlyWeather.dayFive,
+      daySix: hourlyWeather.daySix,
+    };
+
+    const dailyWeatherToday = dailyWeather.today;
+    const dailyWeatherFutureDays = {
+      dayOne: dailyWeather.dayOne,
+      dayTwo: dailyWeather.dayTwo,
+      dayThree: dailyWeather.dayThree,
+      dayFour: dailyWeather.dayFour,
+      dayFive: dailyWeather.dayFive,
+      daySix: dailyWeather.daySix,
+    };
+
+    const { interval, ...currentWeather } = data.current;
+
+    return {
+      latitude: data.latitude,
+      longitude: data.longitude,
+      timezone: data.timezone_abbreviation,
+      elevation: data.elevation,
+      currentWeather,
+      dailyWeatherToday,
+      dailyWeatherFutureDays,
+      hourlyWeatherToday,
+      hourlyWeatherFutureDays,
+    };
+  }
+
+  transformHourlyData(hourly): {
+    today?: any;
+    dayOne?: any;
+    dayTwo?: any;
+    dayThree?: any;
+    dayFour?: any;
+    dayFive?: any;
+    daySix?: any;
+  } {
     const hourlyTransformed = {};
     hourly.time.forEach((time, index) => {
       const hour = new Date(time).getHours();
@@ -99,6 +256,43 @@ export class WeatherService {
       }
     });
 
+    const days = {};
+    Object.entries(hourlyTransformed).forEach(([time, data]) => {
+      const date = time.split('T')[0];
+      if (!days[date]) days[date] = {};
+      days[date][time] = data;
+    });
+
+    const labels = [
+      'today',
+      'dayOne',
+      'dayTwo',
+      'dayThree',
+      'dayFour',
+      'dayFive',
+      'daySix',
+    ];
+
+    const dates = Object.keys(days).sort();
+    const result = {};
+    labels.forEach((label, idx) => {
+      if (dates[idx]) {
+        result[label] = days[dates[idx]];
+      }
+    });
+
+    return result;
+  }
+
+  transformDailyData(daily: any): {
+    today?: any;
+    dayOne?: any;
+    dayTwo?: any;
+    dayThree?: any;
+    dayFour?: any;
+    dayFive?: any;
+    daySix?: any;
+  } {
     const dailyTransformed = {};
     daily.time.forEach((date, index) => {
       dailyTransformed[date] = {
@@ -117,14 +311,77 @@ export class WeatherService {
       };
     });
 
-    return {
-      latitude: data.latitude,
-      longitude: data.longitude,
-      timezone_abbreviation: data.timezone_abbreviation,
-      elevation: data.elevation,
-      current: data.current,
-      hourly: hourlyTransformed,
-      daily: dailyTransformed,
+    const labels = [
+      'today',
+      'dayOne',
+      'dayTwo',
+      'dayThree',
+      'dayFour',
+      'dayFive',
+      'daySix',
+    ];
+    const dates = Object.keys(dailyTransformed).sort();
+
+    const result = {};
+    labels.forEach((label, idx) => {
+      if (dates[idx]) {
+        result[label] = {
+          date: dates[idx],
+          ...dailyTransformed[dates[idx]],
+        };
+      }
+    });
+
+    return result;
+  }
+
+  roundTemperatures(obj: any): any {
+    if (Array.isArray(obj)) {
+      return obj.map(this.roundTemperatures);
+    } else if (obj && typeof obj === 'object') {
+      const newObj: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (
+          key === 'temperature_2m' ||
+          key === 'temperature_2m_min' ||
+          key === 'temperature_2m_max' ||
+          key === 'apparent_temperature'
+        ) {
+          newObj[key] = Math.round(value as number);
+        } else {
+          newObj[key] = this.roundTemperatures(value);
+        }
+      }
+      return newObj;
+    }
+    return obj;
+  }
+
+  markWindy(obj: any, unit: 'ms' | 'kmh' | 'mph' | 'knots'): any {
+    const thresholds = {
+      ms: 14,
+      kmh: 40,
+      mph: 24,
+      knots: 22,
     };
+
+    if (Array.isArray(obj)) {
+      return obj.map((item) => this.markWindy(item, unit));
+    } else if (obj && typeof obj === 'object') {
+      const newObj: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (key === 'wind_speed_10m' || key === 'wind_speed_10m_max') {
+          newObj[key] = value;
+
+          if ((value as number) >= thresholds[unit]) {
+            newObj['weather_code'] = 100;
+          }
+        } else {
+          newObj[key] = this.markWindy(value, unit);
+        }
+      }
+      return newObj;
+    }
+    return obj;
   }
 }
