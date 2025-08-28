@@ -67,14 +67,14 @@
     "nw": "СЗ"
   },
   "moonPhases": {
-    "newMoon": "Новолуние",
-    "waxingCrescent": "Изгряващ Полумесец",
-    "firstQuarter": "Първа Четвърт",
-    "waxingGibbous": "Разтяща Луна",
-    "fullMoon": "Пълнолуние",
-    "waningGibbous": "Намаляваща Луна",
-    "lastQuarter": "Последна Четвърт",
-    "waningCrescent": "Залязващ Полумесец"
+    "new-moon": "Новолуние",
+    "waxing-crescent": "Изгряващ Полумесец",
+    "first-quarter": "Първа Четвърт",
+    "waxing-gibbous": "Разтяща Луна",
+    "full-moon": "Пълнолуние",
+    "waning-gibbous": "Намаляваща Луна",
+    "last-quarter": "Последна Четвърт",
+    "waning-crescent": "Залязващ Полумесец"
   },
   "apparent": "Като",
 
@@ -87,7 +87,25 @@
   "inch": "инч",
   "kmh": "км/ч",
   "ms": "м/с",
+  "mph": "м/ч",
   "knots": "възли",
   "h": "ч",
-  "m": "м"
+  "m": "м",
+  "search": "Търсене",
+  "location": "Локация",
+  
+  "zodiacSigns": {
+    "aries": "Овен",
+    "taurus": "Телец",
+    "gemini": "Близнаци",
+    "cancer": "Рак",
+    "leo": "Лъв",
+    "virgo": "Дева",
+    "libra": "Везни",
+    "scorpio": "Скорпион",
+    "sagittarius": "Стрелец",
+    "capricorn": "Козирог",
+    "aquarius": "Водолей",
+    "pisces": "Риби "
+  }
 }

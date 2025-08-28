@@ -93,6 +93,7 @@ function getWeatherIconBackgroundAndDescription(weatherCode, isDay) {
     "clear",
     "partly-cloudy",
     "overcast",
+    "fog",
     "drizzle",
     "rain",
     "snow",

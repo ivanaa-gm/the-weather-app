@@ -32,8 +32,8 @@ const HourlyWeatherCard = ({
   return (
     <div
       key={time}
-      className={isToday ? "flex flex-col items-center min-w-[140px] gap-2 border-black/10 shadow-xl bg-transparent/15 rounded-xl p-2 m-1 text-sm transition duration-400 ease-in-out transform hover:ring-1 hover:ring-white/30 hover:ring-offset-0 hover:shadow-white/40"
-         : "flex flex-col items-center min-w-[140px] gap-0.5 border-black/10 shadow-xl bg-transparent/15 rounded-xl p-1 m-0.5 text-sm transition duration-400 ease-in-out transform hover:ring-0.5 hover:ring-white/30 hover:ring-offset-0 hover:shadow-white/40"}
+      className={isToday ? "backdrop-blur-sm flex flex-col items-center min-w-[140px] gap-2 border-2 border-black/10 shadow-xl bg-white/30 rounded-xl p-2 m-1 text-sm transition duration-400 ease-in-out transform hover:ring-1 hover:ring-white/30 hover:ring-offset-0 hover:shadow-white/40"
+         : "backdrop-blur-sm flex flex-col items-center min-w-[140px] gap-0.5 border-2 border-black/10 shadow-xl bg-white/30 rounded-xl p-1 m-0.5 text-sm transition duration-400 ease-in-out transform hover:ring-0.5 hover:ring-white/30 hover:ring-offset-0 hover:shadow-white/40"}
     >
       <p className={isToday ? "text-xl" : "text-lg"}>{extractTime(time)}</p>
       <img src={imgPath} alt={iconAndTitle.title} className={isToday ? "h-16" : "h-12"} />

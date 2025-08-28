@@ -67,17 +67,16 @@
     "nw": "NO"
   },
   "moonPhases": {
-    "newMoon": "Luna nueva",
-    "waxingCrescent": "Creciente",
-    "firstQuarter": "Cuarto creciente",
-    "waxingGibbous": "Gibosa creciente",
-    "fullMoon": "Luna llena",
-    "waningGibbous": "Gibosa menguante",
-    "lastQuarter": "Cuarto menguante",
-    "waningCrescent": "Creciente menguante"
+    "new-moon": "Luna nueva",
+    "waxing-crescent": "Creciente",
+    "first-quarter": "Cuarto creciente",
+    "waxing-gibbous": "Gibosa creciente",
+    "full-moon": "Luna llena",
+    "waning-gibbous": "Gibosa menguante",
+    "last-quarter": "Cuarto menguante",
+    "waning-crescent": "Creciente menguante"
   },
   "apparent": "Aparente",
-
   "settings": "Ajustes",
   "language": "Idioma",
   "temperature": "Temperatura",
@@ -87,7 +86,25 @@
   "inch": "pulg",
   "kmh": "km/h",
   "ms": "m/s",
+  "mph": "mph",
   "knots": "nudos",
   "h": "h",
-  "m": "m"
+  "m": "m",
+  "search": "Buscar",
+  "location": "Ubicación",
+  
+  "zodiacSigns": {
+    "aries": "Aries",
+    "taurus": "Tauro",
+    "gemini": "Géminis",
+    "cancer": "Cáncer",
+    "leo": "Leo",
+    "virgo": "Virgo",
+    "libra": "Libra",
+    "scorpio": "Escorpio",
+    "sagittarius": "Sagitario",
+    "capricorn": "Capricornio",
+    "aquarius": "Acuario",
+    "pisces": "Piscis"
+  }
 }

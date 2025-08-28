@@ -16,6 +16,7 @@ const MobileWeatherCard = ({
   currentWeather = null,
   dailyWeather = null,
   hourlyWeather = null,
+  astronomyData = null,
   icon = "",
   code = 0,
   background = "",
@@ -40,6 +41,10 @@ const MobileWeatherCard = ({
     : getWindDirection(dailyWeather.wind_speed_10m_max);
   const daylight = secondsToHours(dailyWeather.daylight_duration);
   const futureHourlyWeather = isToday ? filterFutureHours(hourlyWeather) : null;
+
+  const astrologyBg = `bg-gifs/astrology.gif`;
+  const moonPhaseImg = `/moon-phases/${astronomyData.moonPhase}.png`;
+  const zodiacSignImg = `/zodiac-signs/${astronomyData.zodiacSign}.png`;
 
   return (
     <div
@@ -68,195 +73,209 @@ const MobileWeatherCard = ({
             <PlaceInformation />
           </div>
         </div>
-        {isToday ? (
-          <h1 className="text-5xl font-semibold font-poiret -translate-y-10">
-            {currentWeather.temperature_2m}°{metrics.temperature}
+        <div className="backdrop-blur-md border-2 border-black/10 p-4 m-2 rounded-md flex flex-col items-center -translate-y-10 bg-white/30">
+          {isToday ? (
+            <h1 className="text-5xl font-semibold font-poiret">
+              {currentWeather.temperature_2m}°{metrics.temperature}
+            </h1>
+          ) : (
+            <div className="flex text-4xl flex-row my-4">
+              <div className="flex flex-row items-center">
+                <img
+                  src="/weather-icons/thermometer-warmer.svg"
+                  alt="Max Temperature"
+                  className="h-10"
+                />
+                <p className="font-semibold font-poiret text-[#7d0f0f]">
+                  {dailyWeather.temperature_2m_max}°{metrics.temperature}
+                </p>
+              </div>
+              <div className="flex flex-row items-center">
+                <img
+                  src="/weather-icons/thermometer-colder.svg"
+                  alt="Min Temperature"
+                  className="h-10"
+                />
+                <p className="font-semibold font-poiret text-[#093F58]">
+                  {dailyWeather.temperature_2m_min}°{metrics.temperature}
+                </p>
+              </div>
+            </div>
+          )}
+          <h1 className="text-3xl text-center font-bold">
+            {t(`weatherCodes.${code}`)}
           </h1>
-        ) : (
-          <div className="flex text-4xl flex-row my-4 -translate-y-10">
-            <div className="flex flex-row items-center">
-              <img
-                src="/weather-icons/thermometer-warmer.svg"
-                alt="Max Temperature"
-                className="h-10"
-              />
-              <p className="font-semibold font-poiret text-[#7d0f0f]">
-                {dailyWeather.temperature_2m_max}°{metrics.temperature}
-              </p>
+          {isToday && (
+            <div className="text-xl text-black/60">
+              {t("feelsLike")} {currentWeather.apparent_temperature}°
+              {metrics.temperature}
+            </div>
+          )}
+          {isToday && (
+            <div className="flex flex-row gap-4 text-xl mt-4">
+              <div className="flex flex-row items-center">
+                <img
+                  src="/weather-icons/drop.svg"
+                  alt="Humidity"
+                  className="h-12"
+                />
+                <p>{currentWeather.relative_humidity_2m}%</p>
+              </div>
+              <div className="flex flex-row items-center gap-1">
+                <img
+                  src="/weather-icons/cloud.svg"
+                  alt="Cloud Cover"
+                  className="h-12"
+                />
+                <p>{currentWeather.cloud_cover}%</p>
+              </div>
+              <div className="flex flex-row items-center gap-1">
+                <img
+                  src="/weather-icons/barometer.svg"
+                  alt="Pressure"
+                  className="h-10"
+                />
+                <p>{currentWeather.surface_pressure} Pa</p>
+              </div>
+            </div>
+          )}
+          <div className="flex flex-col text-xl items-center mt-4">
+            <div className="flex flex-col items-center">
+              <div>{t("precipitation")}</div>
+              <div className="flex flex-row items-center text-xl">
+                <img
+                  src="/weather-icons/raindrops.svg"
+                  alt="precipitation"
+                  className="h-10"
+                />
+                {isToday ? (
+                  <p className="">
+                    {currentWeather.precipitation}{" "}
+                    {t(`${metrics.precipitation}`)}
+                  </p>
+                ) : (
+                  <p>
+                    {dailyWeather.precipitation_sum}{" "}
+                    {t(`${metrics.precipitation}`)}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="flex flex-row items-center">
               <img
-                src="/weather-icons/thermometer-colder.svg"
-                alt="Min Temperature"
-                className="h-10"
-              />
-              <p className="font-semibold font-poiret text-[#093F58]">
-                {dailyWeather.temperature_2m_min}°{metrics.temperature}
-              </p>
-            </div>
-          </div>
-        )}
-        <h1 className="text-3xl font-bold -translate-y-6">
-          {t(`weatherCodes.${code}`)}
-        </h1>
-        {isToday && (
-          <div className="text-xl text-black/60 -translate-y-6">
-            {t("feelsLike")} {currentWeather.apparent_temperature}°
-            {metrics.temperature}
-          </div>
-        )}
-        {isToday && (
-          <div className="flex flex-row gap-4 text-xl -translate-y-6">
-            <div className="flex flex-row items-center">
-              <img
-                src="/weather-icons/drop.svg"
-                alt="Humidity"
-                className="h-12"
-              />
-              <p>{currentWeather.relative_humidity_2m}%</p>
-            </div>
-            <div className="flex flex-row items-center gap-1">
-              <img
-                src="/weather-icons/cloud.svg"
-                alt="Cloud Cover"
-                className="h-12"
-              />
-              <p>{currentWeather.cloud_cover}%</p>
-            </div>
-            <div className="flex flex-row items-center gap-1">
-              <img
-                src="/weather-icons/barometer.svg"
-                alt="Pressure"
-                className="h-10"
-              />
-              <p>{currentWeather.surface_pressure} Pa</p>
-            </div>
-          </div>
-        )}
-        <div className="flex flex-col text-xl items-center -translate-y-2">
-          <div className="flex flex-col items-center">
-            <div>{t("precipitation")}</div>
-            <div className="flex flex-row items-center text-xl -translate-x-2">
-              <img
-                src="/weather-icons/raindrops.svg"
+                src="/weather-icons/umbrella.svg"
                 alt="precipitation"
+                className="h-8"
+              />
+              <div className="flex flex-row gap-2 text-lg text-black/80">
+                <div>{t("chanceOfRain")}:</div>
+                <p>{dailyWeather.precipitation_probability_max}%</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col text-xl items-center mt-4">
+            <div>{t("wind")}</div>
+            <div className="flex flex-row items-center">
+              <img
+                src="/weather-icons/dust-wind.svg"
+                alt="Wind"
                 className="h-10"
               />
               {isToday ? (
-                <p className="">
-                  {currentWeather.precipitation} {t(`${metrics.precipitation}`)}
+                <p>
+                  {currentWeather.wind_speed_10m} {t(`${metrics.windSpeed}`)}{" "}
+                  {t(`directions.${windDirection}`)}
                 </p>
               ) : (
-                <p>
-                  {dailyWeather.precipitation_sum}{" "}
-                  {t(`${metrics.precipitation}`)}
+                <p className="-translate-y-1">
+                  {dailyWeather.wind_speed_10m_max} {t(`${metrics.windSpeed}`)}{" "}
+                  {t(`directions.${windDirection}`)}
                 </p>
               )}
             </div>
           </div>
-          <div className="flex flex-row items-center -translate-y-2">
-            <img
-              src="/weather-icons/umbrella.svg"
-              alt="precipitation"
-              className="h-8"
-            />
-            <div className="flex flex-row gap-2 text-lg text-black/80">
-              <div>{t("chanceOfRain")}:</div>
-              <p>{dailyWeather.precipitation_probability_max}%</p>
+          {isToday && (
+            <div className="flex flex-row mt-4">
+              <div className="flex flex-row items-center">
+                <img
+                  src="/weather-icons/thermometer-warmer.svg"
+                  alt="Max Temperature"
+                  className="h-10"
+                />
+                <p className="text-xl font-semibold font-poiret text-[#7d0f0f]">
+                  {dailyWeather.temperature_2m_max}°{metrics.temperature}
+                </p>
+              </div>
+              <div className="flex flex-row items-center">
+                <img
+                  src="/weather-icons/thermometer-colder.svg"
+                  alt="Min Temperature"
+                  className="h-10"
+                />
+                <p className="text-xl font-semibold font-poiret text-[#093F58]">
+                  {dailyWeather.temperature_2m_min}°{metrics.temperature}
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="flex flex-col text-xl items-center">
-          <div>{t("wind")}</div>
-          <div className="flex flex-row items-center -translate-x-2">
-            <img
-              src="/weather-icons/dust-wind.svg"
-              alt="Wind"
-              className="h-10"
-            />
-            {isToday ? (
-              <p>
-                {currentWeather.wind_speed_10m} {t(`${metrics.windSpeed}`)}{" "}
-                {t(`directions.${windDirection}`)}
-              </p>
-            ) : (
-              <p className="-translate-y-1">
-                {dailyWeather.wind_speed_10m_max} {t(`${metrics.windSpeed}`)}{" "}
-                {t(`directions.${windDirection}`)}
-              </p>
-            )}
-          </div>
-        </div>
-        {isToday && (
-          <div className="flex flex-row my-4">
-            <div className="flex flex-row items-center">
+          )}
+          <div className="flex flex-row my-6 gap-2">
+            <div className="flex flex-col w-24 items-center border-x p-2 border-white/40">
               <img
-                src="/weather-icons/thermometer-warmer.svg"
-                alt="Max Temperature"
+                src="/weather-icons/sunrise.svg"
+                alt="Sunrise"
                 className="h-10"
               />
-              <p className="text-xl font-semibold font-poiret text-[#7d0f0f]">
-                {dailyWeather.temperature_2m_max}°{metrics.temperature}
+              <p className="text-xl font-semibold font-poiret">
+                {extractTime(dailyWeather.sunrise)}
               </p>
             </div>
-            <div className="flex flex-row items-center">
+            <div className="flex flex-col w-24 items-center border-r p-2 border-white/40">
               <img
-                src="/weather-icons/thermometer-colder.svg"
-                alt="Min Temperature"
+                src="/weather-icons/sunset.svg"
+                alt="Sunset"
                 className="h-10"
               />
-              <p className="text-xl font-semibold font-poiret text-[#093F58]">
-                {dailyWeather.temperature_2m_min}°{metrics.temperature}
+              <p className="text-xl font-semibold font-poiret">
+                {extractTime(dailyWeather.sunset)}
+              </p>
+            </div>
+            <div className="flex flex-col w-24 items-center border-r p-2 border-white/40">
+              <img
+                src="/weather-icons/horizon.svg"
+                alt="Daylight"
+                className="h-10"
+              />
+              <p className="text-xl font-semibold font-poiret">
+                {daylight.hours}
+                {t("h")} {daylight.minutes}
+                {t("m")}
               </p>
             </div>
           </div>
-        )}
-        <div className="flex flex-row my-4 gap-2">
-          <div className="flex flex-col items-center border-x p-2 border-white/40">
+          <div
+            className="flex flex-row my-6 rounded-2xl p-2 ring-1 ring-white/20 ring-offset-0"
+            style={{ backgroundImage: `url(${astrologyBg})` }}
+          >
+            <div className="flex flex-col justify-center">
+              <img src={moonPhaseImg} alt="Moon Phase" className="h-14" />
+            </div>
+            <div className="flex flex-col justify-center m-4 text-white/70 font-poiret text-lg">
+              <p className="font-semibold text-start">
+                {t(`moonPhases.${astronomyData.moonPhase}`)}
+              </p>
+              <p className="font-semibold text-end">
+                {t(`zodiacSigns.${astronomyData.zodiacSign}`)}
+              </p>
+            </div>
             <img
-              src="/weather-icons/sunrise.svg"
-              alt="Sunrise"
-              className="h-10"
+              src={zodiacSignImg}
+              alt="Star Sign"
+              className="h-24 flex flex-col items-center"
             />
-            <p className="text-xl font-semibold font-poiret">
-              {extractTime(dailyWeather.sunrise)}
-            </p>
-          </div>
-          <div className="flex flex-col items-center border-r p-2 border-white/40">
-            <img
-              src="/weather-icons/sunset.svg"
-              alt="Sunset"
-              className="h-10"
-            />
-            <p className="text-xl font-semibold font-poiret">
-              {extractTime(dailyWeather.sunset)}
-            </p>
-          </div>
-          <div className="flex flex-col items-center border-r p-2 border-white/40">
-            <img
-              src="/weather-icons/horizon.svg"
-              alt="Daylight"
-              className="h-10"
-            />
-            <p className="text-xl font-semibold font-poiret">
-              {daylight.hours}
-              {t("h")} {daylight.minutes}
-              {t("m")}
-            </p>
-          </div>
-          <div className="flex flex-col items-center border-r p-2 border-white/40">
-            <img
-              src="/weather-icons/starry-night.svg"
-              alt="Moon Phase"
-              className="h-10"
-            />
-            <p className="text-xl font-semibold font-poiret">
-              {t(`moonPhases.fullMoon`)}
-            </p>
           </div>
         </div>
       </div>
-      <div className="flex overflow-x-auto mt-4">
+      <div className="flex overflow-x-auto my-4">
         {isToday
           ? Object.entries(futureHourlyWeather).map(([time, data]) => (
               <HourlyWeatherCard

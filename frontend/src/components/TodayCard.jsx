@@ -1,5 +1,6 @@
 import TodayWeatherCard from "./TodayWeatherCard";
 import {
+  astronomyData,
   currentWeather,
   dailyWeatherToday,
   hourlyWeatherToday,
@@ -18,10 +19,10 @@ const TodayCard = () => {
   );
 
   const iconTitleBackground = getWeatherIconBackgroundAndDescription(
-    currentWeather.weather_code,
-    // 0,
-    isDay
-    // true
+    // currentWeather.weather_code,
+    63,
+    // isDay
+    true
   );
 
   return (
@@ -30,6 +31,7 @@ const TodayCard = () => {
         currentWeather={currentWeather}
         dailyWeather={dailyWeatherToday}
         hourlyWeather={hourlyWeatherToday}
+        astronomyData={astronomyData[0]}
         icon={iconTitleBackground.svg}
         code={iconTitleBackground.code}
         background={iconTitleBackground.background}

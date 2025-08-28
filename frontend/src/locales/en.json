@@ -67,14 +67,14 @@
     "nw": "NW"
   },
   "moonPhases": {
-    "newMoon": "New Moon",
-    "waxingCrescent": "Waxing Crescent",
-    "firstQuarter": "First Quarter",
-    "waxingGibbous": "Waxing Gibbous",
-    "fullMoon": "Full Moon",
-    "waningGibbous": "Waning Gibbous",
-    "lastQuarter": "Last Quarter",
-    "waningCrescent": "Waning Crescent"
+    "new-moon": "New Moon",
+    "waxing-crescent": "Waxing Crescent",
+    "first-quarter": "First Quarter",
+    "waxing-gibbous": "Waxing Gibbous",
+    "full-moon": "Full Moon",
+    "waning-gibbous": "Waning Gibbous",
+    "last-quarter": "Last Quarter",
+    "waning-crescent": "Waning Crescent"
   },
   "apparent": "Apparent",
 
@@ -87,7 +87,25 @@
   "inch": "inch",
   "kmh": "km/h",
   "ms": "m/s",
+  "mph": "mph",
   "knots": "knots",
   "h": "h",
-  "m": "m"
+  "m": "m",
+  "search": "Search",
+  "location": "Location",
+  
+  "zodiacSigns": {
+    "aries": "Aries",
+    "taurus": "Taurus",
+    "gemini": "Gemini",
+    "cancer": "Cancer",
+    "leo": "Leo",
+    "virgo": "Virgo",
+    "libra": "Libra",
+    "scorpio": "Scorpio",
+    "sagittarius": "Sagittarius",
+    "capricorn": "Capricorn",
+    "aquarius": "Aquarius",
+    "pisces": "Pisces"
+  }
 }

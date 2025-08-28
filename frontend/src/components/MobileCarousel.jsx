@@ -7,6 +7,7 @@ import {
   hourlyWeatherToday,
   dailyWeatherFutureDays,
   hourlyWeatherFutureDays,
+  astronomyData,
 } from "../utils/api";
 import {
   getWeatherIconBackgroundAndDescription,
@@ -44,6 +45,7 @@ const MobileCarousel = () => {
       currentWeather={currentWeather}
       dailyWeather={dailyWeatherToday}
       hourlyWeather={hourlyWeatherToday}
+      astronomyData={astronomyData[0]}
       icon={iconTitleBackground.svg}
       code={iconTitleBackground.code}
       background={iconTitleBackground.background}
@@ -53,6 +55,7 @@ const MobileCarousel = () => {
         isToday={false}
         dailyWeather={Object.entries(dailyWeatherFutureDays)[i][1]}
         hourlyWeather={Object.entries(hourlyWeatherFutureDays)[i][1]}
+        astronomyData={astronomyData[i + 1]}
         icon={iconsTitlesBackgrouds[i].svg}
         code={iconsTitlesBackgrouds[i].code}
         background={iconsTitlesBackgrouds[i].background}
@@ -73,7 +76,7 @@ const MobileCarousel = () => {
         className="flex-1 flex overflow-x-auto snap-x snap-mandatory"
         onScroll={handleScroll}
       >
-      <Header />
+        <Header />
         {cards.map((card, i) => (
           <div
             key={i}
@@ -86,15 +89,15 @@ const MobileCarousel = () => {
 
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full flex flex-col items-center bg-white/10">
         <div className="flex gap-2 h-4 items-center">
-        {cards.map((_, i) => (
-          <span
-            key={i}
-            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-              i === activeIndex ? "bg-gray-800" : "bg-white"
-            }`}
-          />
-        ))}
-      </div>
+          {cards.map((_, i) => (
+            <span
+              key={i}
+              className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                i === activeIndex ? "bg-gray-800" : "bg-white"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

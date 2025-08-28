@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { WeatherModule } from './weather/weather.module';
 import { LocationModule } from './location/location.module';
-import { AstrologyModule } from './astrology/astrology.module';
+import { AstrologyModule } from './astronomy/astronomy.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
