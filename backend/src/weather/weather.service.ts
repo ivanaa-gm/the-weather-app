@@ -2,9 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { HttpException, HttpStatus } from '@nestjs/common';
+import {
+  WindSpeedUnit,
+  TemperatureUnit,
+  PrecipitationUnit,
+} from './weather-metrics.enum';
 
 export interface FullWeatherResponse {
-  location?: string;
   latitude: number;
   longitude: number;
   timezone: string;
@@ -127,29 +131,15 @@ export interface TodayWeatherResponse {
 export class WeatherService {
   constructor(private httpService: HttpService) {}
 
-  async getLocationCoordinates(location: string) {
-    const locationApiUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=1&language=en&format=json`;
-
-    const response = await firstValueFrom(this.httpService.get(locationApiUrl));
-
-    if (!response.data.results || response.data.results.length === 0) {
-      throw new Error('Location not found');
-    }
-
-    const { latitude, longitude, timezone } = response.data.results[0];
-    console.log('Timezone: ' + timezone);
-    return { latitude, longitude, timezone };
-  }
-
   async getWeather(
     latitude: string,
     longitude: string,
     timezone: string,
-    location?: string,
+    windSpeedUnit: WindSpeedUnit,
+    temperatureUnit: TemperatureUnit,
+    precipitationUnit: PrecipitationUnit,
   ): Promise<FullWeatherResponse> {
-    //TODO: add metrics to the api url: wind speed, temperature, precipitation
-    const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,daylight_duration,uv_index_max,precipitation_probability_max,wind_speed_10m_max,precipitation_sum,wind_direction_10m_dominant&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,uv_index,wind_speed_10m,wind_direction_10m,cloud_cover,precipitation&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_direction_10m&timezone=${encodeURIComponent(timezone)}&wind_speed_unit=ms&temperature_unit=celsius&precipitation_unit=mm`;
-
+    const weatherApiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,daylight_duration,uv_index_max,precipitation_probability_max,wind_speed_10m_max,precipitation_sum,wind_direction_10m_dominant&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,uv_index,wind_speed_10m,wind_direction_10m,cloud_cover,precipitation&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_direction_10m&timezone=${encodeURIComponent(timezone)}&wind_speed_unit=${windSpeedUnit}&temperature_unit=${temperatureUnit}&precipitation_unit=${precipitationUnit}`;
     try {
       const response = await firstValueFrom(
         this.httpService.get(weatherApiUrl),
@@ -157,7 +147,6 @@ export class WeatherService {
       const data = response.data;
 
       let result = {
-        location: location,
         ...this.transformWeather(data),
       };
 
@@ -167,7 +156,8 @@ export class WeatherService {
       return result;
     } catch (error) {
       throw new HttpException(
-        error.response?.data || 'Error fetching weather data from Open Meteo API.',
+        error.response?.data ||
+          'Error fetching weather data from Open Meteo API.',
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -177,9 +167,19 @@ export class WeatherService {
     latitude: string,
     longitude: string,
     timezone: string,
+    windSpeedUnit: WindSpeedUnit,
+    temperatureUnit: TemperatureUnit,
+    precipitationUnit: PrecipitationUnit,
   ): Promise<TodayWeatherResponse> {
     const { currentWeather, dailyWeatherToday, hourlyWeatherToday } =
-      await this.getWeather(latitude, longitude, timezone);
+      await this.getWeather(
+        latitude,
+        longitude,
+        timezone,
+        windSpeedUnit,
+        temperatureUnit,
+        precipitationUnit,
+      );
 
     return {
       currentWeather,
@@ -357,12 +357,12 @@ export class WeatherService {
     return obj;
   }
 
-  markWindy(obj: any, unit: 'ms' | 'kmh' | 'mph' | 'knots'): any {
+  markWindy(obj: any, unit: 'ms' | 'kmh' | 'mph' | 'kn'): any {
     const thresholds = {
       ms: 14,
       kmh: 40,
       mph: 24,
-      knots: 22,
+      kn: 22,
     };
 
     if (Array.isArray(obj)) {

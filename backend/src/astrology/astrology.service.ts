@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export interface AstronomyResponse {
+export interface AstrologyResponse {
   moonPhase: string;
   moonrise: string;
   moonset: string;
@@ -11,13 +11,13 @@ export interface AstronomyResponse {
 }
 
 @Injectable()
-export class AstronomyService {
+export class AstrologyService {
   constructor(private httpService: HttpService) {}
 
-  async getAstronomy(
+  async getAstrology(
     latitude: string,
     lоngitude: string,
-  ): Promise<AstronomyResponse> {
+  ): Promise<AstrologyResponse> {
     const apiKey = process.env.STORMGLASS_API_KEY;
     if (!apiKey) {
       throw new HttpException(
@@ -50,7 +50,6 @@ export class AstronomyService {
           zodiacSign: this.getZodiacSign(date),
         };
       });
-
     } catch (error) {
       throw new HttpException(
         error.response?.data || 'Error fetching data from Stormglass API',
