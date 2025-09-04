@@ -15,6 +15,7 @@ const {
   longitude,
   timezone,
   elevation,
+  location
 } = weatherData;
 
 export {
@@ -27,6 +28,7 @@ export {
   latitude,
   longitude,
   elevation,
+  location,
   locationsData,
   astronomyData,
 };

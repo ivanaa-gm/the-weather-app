@@ -1421,6 +1421,7 @@ const astronomyJSON = `
   }
 ]
 `
+
 const weatherData = JSON.parse(weatherJSON);
 const todayWeatherData = JSON.parse(todayWeatherJSON);
 const locationsData = JSON.parse(locationsJSON);

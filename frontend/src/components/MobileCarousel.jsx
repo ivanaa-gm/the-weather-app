@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Header from "../layout/Header";
-import MobileWeatherCard from "./MobileWeatherCard";
+import MobileWeatherCard from "./weather-cards/MobileWeatherCard";
 import {
   currentWeather,
   dailyWeatherToday,
@@ -26,9 +26,10 @@ const MobileCarousel = () => {
 
   const iconTitleBackground = getWeatherIconBackgroundAndDescription(
     currentWeather.weather_code,
-    // 0,
+    // 51,
     isDay
     // true
+    // false
   );
 
   const iconsTitlesBackgrouds = [];

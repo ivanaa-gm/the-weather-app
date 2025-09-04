@@ -1,4 +1,4 @@
-import TodayWeatherCard from "./TodayWeatherCard";
+import TodayWeatherCard from "./weather-cards/TodayWeatherCard";
 import {
   astronomyData,
   currentWeather,
@@ -20,7 +20,7 @@ const TodayCard = () => {
 
   const iconTitleBackground = getWeatherIconBackgroundAndDescription(
     // currentWeather.weather_code,
-    63,
+    51,
     // isDay
     true
   );
