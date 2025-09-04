@@ -14,7 +14,7 @@ import { useMetrics } from "../../contexts/MetricsContext";
 const WeatherCard = ({
   dailyWeather = null,
   hourlyWeather = null,
-  astronomyData = null,
+  astrologyData = null,
   icon = "",
   title = "",
   code = 0,
@@ -23,7 +23,7 @@ const WeatherCard = ({
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
 
-  if (!dailyWeather || !hourlyWeather) {
+  if (!dailyWeather || !hourlyWeather || !astrologyData) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <CircleLoader color="#2cceff" size={70} />
@@ -39,8 +39,8 @@ const WeatherCard = ({
   const daylight = secondsToHours(dailyWeather.daylight_duration);
 
   const astrologyBg = `bg-gifs/astrology.gif`;
-  const moonPhaseImg = `/moon-phases/${astronomyData.moonPhase}.png`;
-  const zodiacSignImg = `/zodiac-signs/${astronomyData.zodiacSign}.png`;
+  const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
+  const zodiacSignImg = `/zodiac-signs/${astrologyData.zodiacSign}.png`;
 
   return (
     <div
@@ -175,13 +175,13 @@ const WeatherCard = ({
             <div className="flex flex-row items-center gap-2">
               <img src={moonPhaseImg} alt="Moon Phase" className="h-10" />
               <p className="font-semibold text-start text-white/70 font-poiret">
-                {t(`moonPhases.${astronomyData.moonPhase}`)}
+                {t(`moonPhases.${astrologyData.moonPhase}`)}
               </p>
             </div>
 
             <div className="flex flex-row items-center justify-end gap-2">
               <p className="font-semibold text-end text-white/70 font-poiret">
-                {t(`zodiacSigns.${astronomyData.zodiacSign}`)}
+                {t(`zodiacSigns.${astrologyData.zodiacSign}`)}
               </p>
               <img src={zodiacSignImg} alt="Star Sign" className="h-14" />
             </div>

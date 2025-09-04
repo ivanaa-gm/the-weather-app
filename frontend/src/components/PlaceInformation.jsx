@@ -4,7 +4,7 @@ import { formatCoordinates } from "../utils/utils";
 
 const PlaceInformation = () => {
   const { locationData } = useLocation();
-  const { location, latitude, longitude } = locationData;
+  const { location, latitude, longitude, timezoneTerm, elevation } = locationData;
   if (!location) return null;
 
   return (
@@ -24,7 +24,7 @@ const PlaceInformation = () => {
         />
       </div>
       <div className="flex flex-row items-center gap-2 mt-2 text-white font-extralight text-sm">
-        <div className="text-end">FIXME</div>
+        <div className="text-end">{timezoneTerm}</div>
         <Clock
           size={20}
           strokeWidth="1.5"
@@ -32,7 +32,7 @@ const PlaceInformation = () => {
         />
       </div>
       <div className="flex flex-row items-center gap-2 mt-2 text-white font-extralight text-sm">
-        <div className="text-end">FIXME m</div>
+        <div className="text-end">{elevation}</div>
         <Mountain
           size={20}
           strokeWidth="1.5"

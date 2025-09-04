@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "../../contexts/LocationContext";
-import { latitude, longitude } from "../../utils/api";
+import { searchLocations, timezone } from "../../utils/api";
 
 const SearchTab = ({ onClose }) => {
   const { t, i18n } = useTranslation();
@@ -27,10 +27,7 @@ const SearchTab = ({ onClose }) => {
 
     if (value.length > 2) {
       try {
-        const res = await fetch(
-          `http://localhost:3000/locations?string=${query}&lang=en`
-        );
-        const data = await res.json();
+        const data = await searchLocations(value);
         const locations = data.map((loc) => ({
           ...loc,
           flag: `/country-flags/${loc.country_code.toLowerCase()}.svg`,
@@ -46,7 +43,7 @@ const SearchTab = ({ onClose }) => {
   }
 
   return (
-    <div className="absolute left-12 top-0 w-80" ref={ref}>
+    <div className="absolute left-12 top-0 w-96" ref={ref}>
       <div className=" bg-black/90 border border-gray-600 rounded-xl shadow-xl p-1 flex flex-col gap-4">
         <input
           value={query}
@@ -67,8 +64,9 @@ const SearchTab = ({ onClose }) => {
                 setLocationData({
                   location: item.name,
                   latitude: item.latitude,
-                  longitude: item.longitude
-                })
+                  longitude: item.longitude,
+                  timezoneString: item.timezone
+                });
                 setQuery("");
                 setResults([]);
                 onClose();

@@ -16,7 +16,7 @@ const TodayWeatherCard = ({
   currentWeather = null,
   dailyWeather = null,
   hourlyWeather = null,
-  astronomyData = null,
+  astrologydData = null,
   icon = "",
   code = 0,
   background = "",
@@ -24,14 +24,6 @@ const TodayWeatherCard = ({
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
-
-  if (!dailyWeather || !hourlyWeather || (isToday && !currentWeather)) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <CircleLoader color="#2cceff" size={70} />
-      </div>
-    );
-  }
 
   const mainWeatherImg = `/weather-icons/${icon}.svg`;
   const bgPath = `/bg-gifs/${background}.gif`;
@@ -42,8 +34,8 @@ const TodayWeatherCard = ({
   const futureHourlyWeather = filterFutureHours(hourlyWeather);
 
   const astrologyBg = `bg-gifs/astrology.gif`;
-  const moonPhaseImg = `/moon-phases/${astronomyData.moonPhase}.png`;
-  const zodiacSignImg = `/zodiac-signs/${astronomyData.zodiacSign}.png`;
+  const moonPhaseImg = `/moon-phases/${astrologydData.moonPhase}.png`;
+  const zodiacSignImg = `/zodiac-signs/${astrologydData.zodiacSign}.png`;
 
   return (
     <div
@@ -226,10 +218,10 @@ const TodayWeatherCard = ({
             </div>
             <div className="flex flex-col justify-center m-4 text-white/70 font-poiret text-lg">
               <p className="font-semibold text-start">
-                {t(`moonPhases.${astronomyData.moonPhase}`)}
+                {t(`moonPhases.${astrologydData.moonPhase}`)}
               </p>
               <p className="font-semibold text-end">
-                {t(`zodiacSigns.${astronomyData.zodiacSign}`)}
+                {t(`zodiacSigns.${astrologydData.zodiacSign}`)}
               </p>
             </div>
             <img

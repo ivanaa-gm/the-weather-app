@@ -20,7 +20,7 @@ const SettingsTab = ({ onClose }) => {
 
   return (
     <div
-      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 w-80 flex flex-col gap-4"
+      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 w-96 flex flex-col gap-4"
       ref={ref}
     >
       <div className="flex flex-col items-center gap-2">
@@ -100,13 +100,23 @@ const SettingsTab = ({ onClose }) => {
           </button>
           <button
             className={`p-2 px-6 transition rounded-lg ${
-              metrics.windSpeed === "knots"
+              metrics.windSpeed === "mph"
                 ? "bg-[#c5c5c5] text-[#212121f8]"
                 : "hover:bg-white/5"
             }`}
-            onClick={() => setMetrics({ ...metrics, windSpeed: "knots" })}
+            onClick={() => setMetrics({ ...metrics, windSpeed: "mph" })}
           >
-            {t("knots")}
+            {t("mph")}
+          </button>
+          <button
+            className={`p-2 px-6 transition rounded-lg ${
+              metrics.windSpeed === "kn"
+                ? "bg-[#c5c5c5] text-[#212121f8]"
+                : "hover:bg-white/5"
+            }`}
+            onClick={() => setMetrics({ ...metrics, windSpeed: "kn" })}
+          >
+            {t("kn")}
           </button>
         </div>
       </div>

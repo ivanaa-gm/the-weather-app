@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { elevation, timezone } from "../utils/api";
+import { getLocationByGeolocation, searchLocations, timezone } from "../utils/api";
 
 const LocationsContext = createContext();
 
@@ -8,6 +8,9 @@ export const LocationsProvider = ({ children }) => {
     location: null,
     latitude: null,
     longitude: null,
+    timezoneString: null,
+    timezomeTerm: null,
+    elevation: null
   });
 
   useEffect(() => {
@@ -16,15 +19,13 @@ export const LocationsProvider = ({ children }) => {
       const longitude = pos.coords.longitude;
 
       try {
-        const res = await fetch(
-          `http://localhost:3000/locations/geolocation?lat=${latitude}&long=${longitude}`
-        );
-        const data = await res.json();
-
+        const data = await getLocationByGeolocation(latitude, longitude);
+        const timezoneData = await searchLocations(data.location);
         setLocationData({
           location: data.location,
           latitude,
           longitude,
+          timezoneString: timezoneData[0].timezone
         });
       } catch (err) {
         console.error("Failed to fetch location:", err);

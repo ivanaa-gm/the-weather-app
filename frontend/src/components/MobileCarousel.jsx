@@ -1,68 +1,83 @@
 import { useState } from "react";
 import Header from "../layout/Header";
 import MobileWeatherCard from "./weather-cards/MobileWeatherCard";
-import {
-  currentWeather,
-  dailyWeatherToday,
-  hourlyWeatherToday,
-  dailyWeatherFutureDays,
-  hourlyWeatherFutureDays,
-  astronomyData,
-} from "../utils/api";
+import { CircleLoader } from "react-spinners";
 import {
   getWeatherIconBackgroundAndDescription,
   isDaytime,
 } from "../utils/utils";
 
-const MobileCarousel = () => {
+const MobileCarousel = ({
+  currentWeather = null,
+  dailyWeatherToday = null ,
+  hourlyWeatherToday = null,
+  dailyWeatherFutureDays = null,
+  hourlyWeatherFutureDays = null,
+  astrologyData = null
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const now = currentWeather.time;
-  const isDay = isDaytime(
-    now,
-    dailyWeatherToday.sunrise,
-    dailyWeatherToday.sunset
-  );
+  let cards = [];
+  if (
+    !currentWeather ||
+    !dailyWeatherToday ||
+    !hourlyWeatherToday ||
+    !dailyWeatherFutureDays ||
+    !hourlyWeatherFutureDays ||
+    !astrologyData
+  ) {
+    cards = [
+      ...Array.from({ length: 6 }, (_, i) => (
+        <div className="flex h-full w-full items-center justify-center">
+          <CircleLoader color="#2cceff" size={70} />
+        </div>
+      )),
+    ];
+  } else {
+    const now = currentWeather.time;
+    const isDay = isDaytime(
+      now,
+      dailyWeatherToday.sunrise,
+      dailyWeatherToday.sunset
+    );
 
-  const iconTitleBackground = getWeatherIconBackgroundAndDescription(
-    currentWeather.weather_code,
-    // 51,
-    isDay
-    // true
-    // false
-  );
+    const iconTitleBackground = getWeatherIconBackgroundAndDescription(
+      currentWeather.weather_code,
+      isDay
+    );
 
-  const iconsTitlesBackgrouds = [];
-  Object.values(dailyWeatherFutureDays)
-    .map((day) => day.weather_code)
-    .forEach((code) => {
-      const details = getWeatherIconBackgroundAndDescription(code, true);
-      iconsTitlesBackgrouds.push(details);
-    });
+    const iconsTitlesBackgrouds = [];
+    Object.values(dailyWeatherFutureDays)
+      .map((day) => day.weather_code)
+      .forEach((code) => {
+        const details = getWeatherIconBackgroundAndDescription(code, true);
+        iconsTitlesBackgrouds.push(details);
+      });
 
-  const cards = [
-    <MobileWeatherCard
-      isToday={true}
-      currentWeather={currentWeather}
-      dailyWeather={dailyWeatherToday}
-      hourlyWeather={hourlyWeatherToday}
-      astronomyData={astronomyData[0]}
-      icon={iconTitleBackground.svg}
-      code={iconTitleBackground.code}
-      background={iconTitleBackground.background}
-    />,
-    ...Array.from({ length: 6 }, (_, i) => (
+    cards = [
       <MobileWeatherCard
-        isToday={false}
-        dailyWeather={Object.entries(dailyWeatherFutureDays)[i][1]}
-        hourlyWeather={Object.entries(hourlyWeatherFutureDays)[i][1]}
-        astronomyData={astronomyData[i + 1]}
-        icon={iconsTitlesBackgrouds[i].svg}
-        code={iconsTitlesBackgrouds[i].code}
-        background={iconsTitlesBackgrouds[i].background}
-      />
-    )),
-  ];
+        isToday={true}
+        currentWeather={currentWeather}
+        dailyWeather={dailyWeatherToday}
+        hourlyWeather={hourlyWeatherToday}
+        astrologyData={astrologyData[0]}
+        icon={iconTitleBackground.svg}
+        code={iconTitleBackground.code}
+        background={iconTitleBackground.background}
+      />,
+      ...Array.from({ length: 6 }, (_, i) => (
+        <MobileWeatherCard
+          isToday={false}
+          dailyWeather={Object.entries(dailyWeatherFutureDays)[i][1]}
+          hourlyWeather={Object.entries(hourlyWeatherFutureDays)[i][1]}
+          astrologyData={astrologyData[i + 1]}
+          icon={iconsTitlesBackgrouds[i].svg}
+          code={iconsTitlesBackgrouds[i].code}
+          background={iconsTitlesBackgrouds[i].background}
+        />
+      )),
+    ];
+  }
 
   const handleScroll = (e) => {
     const scrollX = e.target.scrollLeft;

@@ -1,16 +1,24 @@
 import TodayWeatherCard from "./weather-cards/TodayWeatherCard";
 import {
-  astronomyData,
-  currentWeather,
-  dailyWeatherToday,
-  hourlyWeatherToday,
-} from "../utils/api";
-import {
   getWeatherIconBackgroundAndDescription,
   isDaytime,
 } from "../utils/utils";
+import { CircleLoader } from "react-spinners";
 
-const TodayCard = () => {
+const TodayCard = ({
+  currentWeather = null,
+  dailyWeatherToday = null,
+  hourlyWeatherToday = null,
+  astrologyData = null
+}) => {
+  if (!currentWeather || !dailyWeatherToday || !hourlyWeatherToday || !astrologyData) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <CircleLoader color="#2cceff" size={70} />
+      </div>
+    );
+  }
+
   const now = currentWeather.time;
   const isDay = isDaytime(
     now,
@@ -19,10 +27,10 @@ const TodayCard = () => {
   );
 
   const iconTitleBackground = getWeatherIconBackgroundAndDescription(
-    // currentWeather.weather_code,
-    51,
-    // isDay
-    true
+    currentWeather.weather_code,
+    // 51,
+    isDay
+    // true
   );
 
   return (
@@ -31,7 +39,7 @@ const TodayCard = () => {
         currentWeather={currentWeather}
         dailyWeather={dailyWeatherToday}
         hourlyWeather={hourlyWeatherToday}
-        astronomyData={astronomyData[0]}
+        astrologyData={astrologyData}
         icon={iconTitleBackground.svg}
         code={iconTitleBackground.code}
         background={iconTitleBackground.background}
