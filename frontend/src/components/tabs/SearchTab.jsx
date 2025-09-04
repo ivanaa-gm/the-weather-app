@@ -1,17 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { locationsData } from "../../utils/api";
+import { useLocation } from "../../contexts/LocationContext";
+import { latitude, longitude } from "../../utils/api";
 
 const SearchTab = ({ onClose }) => {
   const { t, i18n } = useTranslation();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const ref = useRef(null);
+  const { locationData, setLocationData } = useLocation();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
-        onClose(); 
+        onClose();
       }
     };
 
@@ -19,20 +21,29 @@ const SearchTab = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleInputChange = (e) => {
+  async function handleInputChange(e) {
     const value = e.target.value;
     setQuery(value);
 
     if (value.length > 2) {
-      const updatedLocations = locationsData.map((loc) => ({
-        ...loc,
-        flag: `/country-flags/${loc.country_code.toLowerCase()}.svg`,
-      }));
-      setResults(updatedLocations);
+      try {
+        const res = await fetch(
+          `http://localhost:3000/locations?string=${query}&lang=en`
+        );
+        const data = await res.json();
+        const locations = data.map((loc) => ({
+          ...loc,
+          flag: `/country-flags/${loc.country_code.toLowerCase()}.svg`,
+        }));
+        setResults(locations);
+      } catch (err) {
+        console.error("Failed to fetch location:", err);
+        setResults([]);
+      }
     } else {
       setResults([]);
     }
-  };
+  }
 
   return (
     <div className="absolute left-12 top-0 w-80" ref={ref}>
@@ -53,8 +64,14 @@ const SearchTab = ({ onClose }) => {
               key={index}
               className="flex flex-row gap-2 items-center px-3 py-2 hover:bg-black/50 cursor-pointer"
               onClick={() => {
-                setQuery(item.name + ", " + item.admin1);
+                setLocationData({
+                  location: item.name,
+                  latitude: item.latitude,
+                  longitude: item.longitude
+                })
+                setQuery("");
                 setResults([]);
+                onClose();
               }}
             >
               <img className="h-4" src={item.flag} alt={item.country_code} />
