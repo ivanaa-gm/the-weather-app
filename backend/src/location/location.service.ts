@@ -16,7 +16,10 @@ export interface LocationResponse {
 export class LocationService {
   constructor(private httpService: HttpService) {}
 
-  async getLocations(locationString: string, language: string): Promise<LocationResponse> {
+  async getLocations(
+    locationString: string,
+    language: string,
+  ): Promise<LocationResponse> {
     const locationApiUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${locationString}&count=20&language=${language}&format=json`;
 
     try {
@@ -35,7 +38,34 @@ export class LocationService {
       }));
     } catch (error) {
       throw new HttpException(
-        error.response?.data || 'Error fetching geolocation data from Open Meteo API.',
+        error.response?.data ||
+          'Error fetching locations data from Open Meteo API.',
+        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getLocationFromCoords(lat: string, long: string): Promise<any> {
+    const apiKey = process.env.GEOCODING_API_KEY;
+    if (!apiKey) {
+      throw new HttpException(
+        'API key not found. ',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    const geolocationApi = `https://geocode.maps.co/reverse?lat=${lat}&lon=${long}&api_key=${apiKey}`;
+
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(geolocationApi),
+      );
+      const data = response.data;
+
+      return {location: data.address.city};
+    } catch (error) {
+      throw new HttpException(
+        error.response?.data ||
+          'Error fetching geolocation data from Geocoding API.',
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

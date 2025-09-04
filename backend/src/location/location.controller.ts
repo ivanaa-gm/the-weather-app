@@ -10,4 +10,9 @@ export class LocationController {
   async getLocations(@Query('string') locationString: string, @Query('lang') language: string): Promise<LocationResponse> {
     return this.locationService.getLocations(locationString, language);
   }
+
+  @Get("/geolocation")
+  async getLocationFromCoords(@Query('lat') lat: string, @Query('long') long: string): Promise<any> {
+    return this.locationService.getLocationFromCoords(lat, long);
+  }
 }
