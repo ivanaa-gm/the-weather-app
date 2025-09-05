@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getLocationByGeolocation, searchLocations, timezone } from "../utils/api";
+import { getLocationByGeolocation, searchLocations } from "../utils/api";
 
 const LocationsContext = createContext();
 

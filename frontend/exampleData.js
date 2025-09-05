@@ -1389,7 +1389,7 @@ const locationsJSON = `
 ]
 `;
 
-const astronomyJSON = `
+const astrologyJSON = `
 [
   {
     "moonPhase": "waxing-crescent",
@@ -1425,6 +1425,6 @@ const astronomyJSON = `
 const weatherData = JSON.parse(weatherJSON);
 const todayWeatherData = JSON.parse(todayWeatherJSON);
 const locationsData = JSON.parse(locationsJSON);
-const astronomyData = JSON.parse(astronomyJSON);
+const astrologyData = JSON.parse(astrologyJSON);
 
-export {weatherData, todayWeatherData, locationsData, astronomyData};
+export {weatherData, todayWeatherData, locationsData, astrologyData};

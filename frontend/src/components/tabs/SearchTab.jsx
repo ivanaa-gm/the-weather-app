@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "../../contexts/LocationContext";
-import { searchLocations, timezone } from "../../utils/api";
+import { searchLocations } from "../../utils/api";
+import { CircleLoader } from "react-spinners";
 
 const SearchTab = ({ onClose }) => {
   const { t, i18n } = useTranslation();
@@ -9,17 +10,6 @@ const SearchTab = ({ onClose }) => {
   const [results, setResults] = useState([]);
   const ref = useRef(null);
   const { locationData, setLocationData } = useLocation();
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   async function handleInputChange(e) {
     const value = e.target.value;
@@ -43,7 +33,7 @@ const SearchTab = ({ onClose }) => {
   }
 
   return (
-    <div className="absolute left-12 top-0 w-96" ref={ref}>
+    <div className="absolute left-12 top-0 md:w-96 min-w-80" ref={ref}>
       <div className=" bg-black/90 border border-gray-600 rounded-xl shadow-xl p-1 flex flex-col gap-4">
         <input
           value={query}
@@ -54,8 +44,8 @@ const SearchTab = ({ onClose }) => {
           autoCapitalize="words"
         />
       </div>
-      {results.length > 0 && (
-        <div className="h-60 overflow-scroll bg-black/90 border border-gray-600 rounded-xl shadow-xl">
+      {results.length > 0 ? (
+        <div className="h-60 overflow-scroll bg-black/90 border duration-400 border-gray-600 rounded-xl shadow-xl">
           {results.map((item, index) => (
             <div
               key={index}
@@ -79,7 +69,11 @@ const SearchTab = ({ onClose }) => {
             </div>
           ))}
         </div>
-      )}
+      ) : query.length > 0 ? (
+        <div className="flex justify-center h-10 overflow-scroll duration-400 bg-black/90 border items-center border-gray-600 rounded-xl shadow-xl">
+          <CircleLoader color="#CACED1" size={18} />
+        </div>
+      ) : (<></>)}
     </div>
   );
 };

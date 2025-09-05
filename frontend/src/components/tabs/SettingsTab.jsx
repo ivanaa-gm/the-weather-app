@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useMetrics } from "../../contexts/MetricsContext";
 import { useTranslation } from "react-i18next";
 
@@ -7,20 +7,9 @@ const SettingsTab = ({ onClose }) => {
   const { t, i18n } = useTranslation();
   const ref = useRef();
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
     <div
-      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 w-96 flex flex-col gap-4"
+      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 md:w-96 min-w-80 flex flex-col gap-4"
       ref={ref}
     >
       <div className="flex flex-col items-center gap-2">

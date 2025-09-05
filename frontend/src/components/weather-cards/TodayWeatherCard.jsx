@@ -7,7 +7,6 @@ import {
 } from "../../utils/utils";
 import HourlyWeatherCard from "./HourlyWeatherCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { CircleLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../../contexts/MetricsContext";
 import PlaceInformation from "../PlaceInformation";
@@ -16,7 +15,7 @@ const TodayWeatherCard = ({
   currentWeather = null,
   dailyWeather = null,
   hourlyWeather = null,
-  astrologydData = null,
+  astrologyData = null,
   icon = "",
   code = 0,
   background = "",
@@ -34,8 +33,8 @@ const TodayWeatherCard = ({
   const futureHourlyWeather = filterFutureHours(hourlyWeather);
 
   const astrologyBg = `bg-gifs/astrology.gif`;
-  const moonPhaseImg = `/moon-phases/${astrologydData.moonPhase}.png`;
-  const zodiacSignImg = `/zodiac-signs/${astrologydData.zodiacSign}.png`;
+  const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
+  const zodiacSignImg = `/zodiac-signs/${astrologyData.zodiacSign}.png`;
 
   return (
     <div
@@ -218,10 +217,10 @@ const TodayWeatherCard = ({
             </div>
             <div className="flex flex-col justify-center m-4 text-white/70 font-poiret text-lg">
               <p className="font-semibold text-start">
-                {t(`moonPhases.${astrologydData.moonPhase}`)}
+                {t(`moonPhases.${astrologyData.moonPhase}`)}
               </p>
               <p className="font-semibold text-end">
-                {t(`zodiacSigns.${astrologydData.zodiacSign}`)}
+                {t(`zodiacSigns.${astrologyData.zodiacSign}`)}
               </p>
             </div>
             <img

@@ -8,8 +8,8 @@ const PlaceInformation = () => {
   if (!location) return null;
 
   return (
-    <div className="flex flex-col items-end">
-      <div className="text-end w-20 text-white font-medium mt-2 mr-4">
+    <div className="flex flex-col items-end mr-2">
+      <div className="text-end w-20 text-white font-medium mt-2">
         {location}
       </div>
       <div className="flex flex-row items-center gap-2 mt-2 text-white font-extralight text-sm">

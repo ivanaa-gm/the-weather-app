@@ -5,8 +5,9 @@ import { getWeather, getCurrentWeather, getAstrology } from "../utils/api";
 import { useMetrics } from "../contexts/MetricsContext";
 import { useState, useEffect } from "react";
 import { useLocation } from "../contexts/LocationContext";
+import { astrologyData } from "../utils/api";
 
-const MainContent = () => {
+const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
   const [weather, setWeather] = useState(null);
   const [astrology, setAstrology] = useState(null);
   const [currentWeather, setCurrentWeather] = useState(null);
@@ -99,12 +100,15 @@ const MainContent = () => {
         locationData.latitude && locationData.longitude;
       if (locationDataLoaded) {
         try {
-          const data = await getAstrology(
-            locationData.latitude,
-            locationData.longitude
-          );
+          // const data = await getAstrology(
+          //   locationData.latitude,
+          //   locationData.longitude
+          // );
 
-          if (data) setAstrology(data);
+          // if (data) {
+          //   setAstrology(data);
+          // }
+          setAstrology(astrologyData);
         } catch (err) {
           console.log(err);
         }
@@ -115,7 +119,9 @@ const MainContent = () => {
   }, [locationData.latitude, locationData.longitude]);
 
   return (
-    <div className="h-full w-full ">
+    <div
+      className={`transition h-full duration-400 ${isBlurred ? "blur-sm" : ""}`}
+    >
       <div className="hidden md:grid grid-cols-3 h-full w-full">
         <div className="col-span-1 h-full">
           <TodayCard
@@ -142,6 +148,8 @@ const MainContent = () => {
           dailyWeatherFutureDays={weather?.dailyWeatherFutureDays || null}
           hourlyWeatherFutureDays={weather?.hourlyWeatherFutureDays || null}
           astrologyData={astrology || []}
+          openTab={openTab}
+          setOpenTab={setOpenTab}
         />
       </div>
     </div>

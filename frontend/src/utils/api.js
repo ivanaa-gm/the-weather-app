@@ -1,24 +1,5 @@
-import {
-  weatherData,
-  todayWeatherData,
-  locationsData,
-  astronomyData,
-} from "../../exampleData";
-
-const {
-  currentWeather,
-  dailyWeatherToday,
-  dailyWeatherFutureDays,
-  hourlyWeatherToday,
-  hourlyWeatherFutureDays,
-  latitude,
-  longitude,
-  timezone,
-  elevation,
-  location,
-} = weatherData;
-
 const BASE_URL = "http://localhost:3000";
+import { astrologyData } from "../../exampleData";
 
 export async function getLocationByGeolocation(lat, long) {
   const res = await fetch(
@@ -73,16 +54,5 @@ export async function getAstrology(lat, long) {
 }
 
 export {
-  currentWeather,
-  dailyWeatherToday,
-  dailyWeatherFutureDays,
-  hourlyWeatherToday,
-  hourlyWeatherFutureDays,
-  timezone,
-  latitude,
-  longitude,
-  elevation,
-  location,
-  locationsData,
-  astronomyData,
+  astrologyData
 };

@@ -6,7 +6,6 @@ import {
   secondsToHours,
 } from "../../utils/utils";
 import HourlyWeatherCard from "./HourlyWeatherCard";
-import { CircleLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../../contexts/MetricsContext";
 import PlaceInformation from "../PlaceInformation";
@@ -40,7 +39,7 @@ const MobileWeatherCard = ({
 
   return (
     <div
-      className="h-full w-full overflow-y-auto bg-cover bg-center"
+      className="h-full w-screen overflow-y-auto bg-cover bg-center"
       style={{ backgroundImage: `url(${bgPath})` }}
     >
       <div className="flex flex-col items-center w-full">
@@ -256,7 +255,7 @@ const MobileWeatherCard = ({
                 {t(`moonPhases.${astrologyData.moonPhase}`)}
               </p>
               <p className="font-semibold text-end">
-                {t(`zodiacSigns.${astrologyBg.zodiacSign}`)}
+                {t(`zodiacSigns.${astrologyData.zodiacSign}`)}
               </p>
             </div>
             <img

@@ -9,11 +9,13 @@ import {
 
 const MobileCarousel = ({
   currentWeather = null,
-  dailyWeatherToday = null ,
+  dailyWeatherToday = null,
   hourlyWeatherToday = null,
   dailyWeatherFutureDays = null,
   hourlyWeatherFutureDays = null,
-  astrologyData = null
+  astrologyData = null,
+  openTab,
+  setOpenTab,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -87,12 +89,12 @@ const MobileCarousel = ({
   };
 
   return (
-    <div className="h-full w-full flex flex-col relative">
+    <div className="h-full w-screen flex flex-col relative">
       <div
         className="flex-1 flex overflow-x-auto snap-x snap-mandatory"
         onScroll={handleScroll}
       >
-        <Header />
+        <Header openTab={openTab} setOpenTab={setOpenTab} />
         {cards.map((card, i) => (
           <div
             key={i}
