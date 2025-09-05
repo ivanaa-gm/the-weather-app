@@ -49,7 +49,7 @@ const MobileWeatherCard = ({
           </div>
           <div className="flex justify-center">
             <div className="flex flex-col items-center">
-              <div className="mt-6">
+              <div className="mt-6 text-white">
                 {t(`days.${weekday}`)}, {day} {t(`months.${month}`)}
               </div>
               <img

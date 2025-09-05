@@ -6,11 +6,16 @@ import { useState } from "react";
 
 function App() {
   const [openTab, setOpenTab] = useState(null);
+  const handleCloseTab = () => setOpenTab(null);
 
   return (
     <MetricsProvider>
       <LocationsProvider>
-        <Header openTab={openTab} setOpenTab={setOpenTab} />
+        <Header
+          openTab={openTab}
+          setOpenTab={setOpenTab}
+          onClose={handleCloseTab}
+        />
         <MainContent
           openTab={openTab}
           setOpenTab={setOpenTab}

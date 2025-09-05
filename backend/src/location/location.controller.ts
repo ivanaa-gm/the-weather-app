@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { LocationService } from './location.service';
-import { LocationResponse } from './location.service';
+import { LocationResponse, GeolocationResponse } from './location.service';
 
 @Controller('locations')
 export class LocationController {
@@ -12,7 +12,7 @@ export class LocationController {
   }
 
   @Get("/geolocation")
-  async getLocationFromCoords(@Query('lat') lat: string, @Query('long') long: string): Promise<any> {
+  async getLocationFromCoords(@Query('lat') lat: string, @Query('long') long: string): Promise<GeolocationResponse> {
     return this.locationService.getLocationFromCoords(lat, long);
   }
 }

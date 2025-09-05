@@ -33,29 +33,30 @@ const SearchTab = ({ onClose }) => {
   }
 
   return (
-    <div className="absolute left-12 top-0 md:w-96 min-w-80" ref={ref}>
+    <div className="absolute left-12 top-0 md:w-96 w-[22rem] duration-500" ref={ref}>
       <div className=" bg-black/90 border border-gray-600 rounded-xl shadow-xl p-1 flex flex-col gap-4">
         <input
           value={query}
           onChange={handleInputChange}
-          className="bg-white/10 border-2 h-8 px-2 text-lg text-white/90 border-white/70 rounded-md"
+          className="bg-black/70 border-2 h-8 px-2 text-lg text-white/90 border-white/70 rounded-md"
           placeholder={t("location")}
           autoFocus
           autoCapitalize="words"
         />
       </div>
       {results.length > 0 ? (
-        <div className="h-60 overflow-scroll bg-black/90 border duration-400 border-gray-600 rounded-xl shadow-xl">
+        <div className="h-60 overflow-scroll bg-black/90 border border-gray-600 rounded-xl shadow-xl">
           {results.map((item, index) => (
             <div
               key={index}
-              className="flex flex-row gap-2 items-center px-3 py-2 hover:bg-black/50 cursor-pointer"
+              className="flex flex-row gap-2 items-center px-3 py-2 hover:bg-white/10 cursor-pointer"
               onClick={() => {
                 setLocationData({
                   location: item.name,
                   latitude: item.latitude,
                   longitude: item.longitude,
-                  timezoneString: item.timezone
+                  timezoneString: item.timezone,
+                  admin1: item.admin1
                 });
                 setQuery("");
                 setResults([]);
@@ -70,7 +71,7 @@ const SearchTab = ({ onClose }) => {
           ))}
         </div>
       ) : query.length > 0 ? (
-        <div className="flex justify-center h-10 overflow-scroll duration-400 bg-black/90 border items-center border-gray-600 rounded-xl shadow-xl">
+        <div className="flex justify-center h-10 overflow-scroll bg-black/90 border items-center border-gray-600 rounded-xl shadow-xl">
           <CircleLoader color="#CACED1" size={18} />
         </div>
       ) : (<></>)}

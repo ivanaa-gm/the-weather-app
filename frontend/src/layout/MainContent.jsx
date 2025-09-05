@@ -121,6 +121,7 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
   return (
     <div
       className={`transition h-full duration-400 ${isBlurred ? "blur-sm" : ""}`}
+      onClick={() => setOpenTab(null)}
     >
       <div className="hidden md:grid grid-cols-3 h-full w-full">
         <div className="col-span-1 h-full">

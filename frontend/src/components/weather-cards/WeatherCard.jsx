@@ -49,7 +49,7 @@ const WeatherCard = ({
     >
       <div className="flex flex-col items-center">
         <div className="flex flex-col items-center">
-          <div className="mt-4">
+          <div className="mt-4 text-white">
             {t(`days.${weekday}`)}, {day} {t(`months.${month}`)}
           </div>
           <img

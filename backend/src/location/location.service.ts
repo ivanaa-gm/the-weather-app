@@ -12,6 +12,10 @@ export interface LocationResponse {
   admin1: string;
 }
 
+export interface GeolocationResponse {
+  location: string;
+}
+
 @Injectable()
 export class LocationService {
   constructor(private httpService: HttpService) {}
@@ -45,7 +49,7 @@ export class LocationService {
     }
   }
 
-  async getLocationFromCoords(lat: string, long: string): Promise<any> {
+  async getLocationFromCoords(lat: string, long: string): Promise<GeolocationResponse> {
     const apiKey = process.env.GEOCODING_API_KEY;
     if (!apiKey) {
       throw new HttpException(

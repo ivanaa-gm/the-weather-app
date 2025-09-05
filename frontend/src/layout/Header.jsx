@@ -4,34 +4,14 @@ import SettingsTab from "../components/tabs/SettingsTab";
 import SearchTab from "../components/tabs/SearchTab";
 import InfoTab from "../components/tabs/InfoTab";
 
-const Header = ({ openTab, setOpenTab }) => {
-  const buttonsRef = useRef(null);
-  const tabRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        tabRef.current &&
-        !tabRef.current.contains(e.target) &&
-        buttonsRef.current &&
-        !buttonsRef.current.contains(e.target)
-      ) {
-        setOpenTab(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
+const Header = ({ openTab, setOpenTab, onClose }) => {
   const toggleTab = (tabName) => {
     setOpenTab((prev) => (prev === tabName ? null : tabName));
   };
 
   return (
     <div className="absolute left-0 top-0 z-[9999]">
-      <div className="p-2 text-white flex flex-col gap-2" ref={buttonsRef}>
-        
+      <div className="p-2 text-white flex flex-col gap-2">
         <div className="relative">
           <div
             className={`flex items-center justify-center w-10 h-10 duration-500 rounded-full shadow-2xl cursor-pointer transition hover:scale-105 filter hover:brightness-105 
@@ -40,11 +20,7 @@ const Header = ({ openTab, setOpenTab }) => {
           >
             <Search size={24} />
           </div>
-          {openTab === "search" && (
-            <div ref={tabRef}>
-              <SearchTab onClose={() => setOpenTab(null)} />
-            </div>
-          )}
+          {openTab === "search" && <SearchTab onClose={onClose} />}
         </div>
 
         <div className="relative">
@@ -55,11 +31,7 @@ const Header = ({ openTab, setOpenTab }) => {
           >
             <Settings size={24} />
           </div>
-          {openTab === "settings" && (
-            <div ref={tabRef}>
-              <SettingsTab onClose={() => setOpenTab(null)} />
-            </div>
-          )}
+          {openTab === "settings" && <SettingsTab onClose={onClose} />}
         </div>
 
         <div className="relative">
@@ -70,15 +42,12 @@ const Header = ({ openTab, setOpenTab }) => {
           >
             <Info size={24} />
           </div>
-          {openTab === "info" && (
-            <div ref={tabRef}>
-              <InfoTab onClose={() => setOpenTab(null)} />
-            </div>
-          )}
+          {openTab === "info" && <InfoTab onClose={onClose} />}
         </div>
       </div>
     </div>
   );
 };
+
 
 export default Header;

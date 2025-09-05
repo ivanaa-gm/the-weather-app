@@ -10,7 +10,8 @@ export const LocationsProvider = ({ children }) => {
     longitude: null,
     timezoneString: null,
     timezomeTerm: null,
-    elevation: null
+    elevation: null,
+    admin1: null
   });
 
   useEffect(() => {
@@ -25,7 +26,8 @@ export const LocationsProvider = ({ children }) => {
           location: data.location,
           latitude,
           longitude,
-          timezoneString: timezoneData[0].timezone
+          timezoneString: timezoneData[0].timezone,
+          admin1: timezoneData[0].admin1
         });
       } catch (err) {
         console.error("Failed to fetch location:", err);
