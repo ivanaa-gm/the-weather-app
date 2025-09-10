@@ -10,7 +10,7 @@ export class AstrologyController {
   async getAstrology(
     @Query('lat') latitude: string,
     @Query('long') longitude: string,
-  ): Promise<AstrologyResponse> {
+  ): Promise<AstrologyResponse[] | null> {
     return this.astrologyService.getAstrology(latitude, longitude);
   }
 }

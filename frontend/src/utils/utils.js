@@ -135,8 +135,7 @@ function getWindDirection(degrees) {
 }
 
 function filterFutureHours(hourlyWeather) {
-  // const now = new Date();
-  const now = new Date("2025-08-20T15:00:00");
+  const now = new Date();
 
   const futureEntries = Object.entries(hourlyWeather).filter(([time]) => {
     return new Date(time) > now;

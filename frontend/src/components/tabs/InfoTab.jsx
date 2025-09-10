@@ -4,7 +4,7 @@ const InfoTab = ({ onClose }) => {
 
   return (
     <div
-      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 md:w-96 w-[22rem]"
+      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 md:w-96 w-[20rem]"
       ref={ref}
     >
       <p className="text-center text-white">

@@ -14,29 +14,33 @@ export interface AstrologyResponse {
 export class AstrologyService {
   constructor(private httpService: HttpService) {}
 
-  async getAstrology(
-    latitude: string,
-    lоngitude: string,
-  ): Promise<AstrologyResponse> {
+  private cachedData: AstrologyResponse[] | null = null;
+  private cachedDate: string | null = null;
+
+  async getAstrology(latitude: string, longitude: string): Promise<AstrologyResponse[] | null> {
+    const today = new Date().toISOString().split('T')[0];
+
+    if (this.cachedData && this.cachedDate === today) {
+      return this.cachedData;
+    }
+
     const apiKey = process.env.STORMGLASS_API_KEY;
     if (!apiKey) {
       throw new HttpException(
-        'API key not found. ',
+        'API key not found.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
 
-    const url = `https://api.stormglass.io/v2/astronomy/point?lat=${latitude}&lng=${lоngitude}`;
+    const url = `https://api.stormglass.io/v2/astronomy/point?lat=${latitude}&lng=${longitude}`;
     try {
       const response = await firstValueFrom(
         this.httpService.get(url, {
-          headers: {
-            Authorization: apiKey,
-          },
+          headers: { Authorization: apiKey },
         }),
       );
 
-      return response.data.data.slice(0, 7).map((item) => {
+      const data = response.data.data.slice(0, 7).map((item) => {
         const date = item.time.split('T')[0];
         const moonPhaseText = item.moonPhase.current.text;
 
@@ -45,11 +49,19 @@ export class AstrologyService {
           .replace(/\s+/g, '-')
           .toLowerCase();
 
+        const astronomicalDawnDate = item.astronomicalDawn.split('T')[0];
+
         return {
           moonPhase: formattedMoonPhase,
           zodiacSign: this.getZodiacSign(date),
+          astronomicalDawn: astronomicalDawnDate,
         };
       });
+
+      this.cachedData = data;
+      this.cachedDate = data[0].astronomicalDawn;
+
+      return this.cachedData;
     } catch (error) {
       throw new HttpException(
         error.response?.data || 'Error fetching data from Stormglass API',
@@ -74,9 +86,7 @@ export class AstrologyService {
       { sign: 'sagittarius', start: '11-22', end: '12-21' },
     ];
     const [year, month, day] = date.split('-').map(Number);
-    const formattedDate = `${month.toString().padStart(2, '0')}-${day
-      .toString()
-      .padStart(2, '0')}`;
+    const formattedDate = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
     for (const { sign, start, end } of zodiacSigns) {
       if (start <= end) {

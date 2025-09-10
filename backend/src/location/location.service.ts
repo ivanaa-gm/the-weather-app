@@ -23,7 +23,7 @@ export class LocationService {
   async getLocations(
     locationString: string,
     language: string,
-  ): Promise<LocationResponse> {
+  ): Promise<LocationResponse | []> {
     const locationApiUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${locationString}&count=20&language=${language}&format=json`;
 
     try {
@@ -32,24 +32,30 @@ export class LocationService {
       );
       const data = response.data;
 
-      return data.results.map((loc: any) => ({
-        name: loc.name,
-        latitude: loc.latitude,
-        longitude: loc.longitude,
-        country_code: loc.country_code,
-        timezone: loc.timezone,
-        admin1: loc.admin1,
-      }));
+      if (data.results && Array.isArray(data.results)) {
+        return data.results.map((loc: any) => ({
+          name: loc.name,
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+          country_code: loc.country_code,
+          timezone: loc.timezone,
+          admin1: loc.admin1,
+        }));
+      }
+
+      return [];
     } catch (error) {
       throw new HttpException(
-        error.response?.data ||
-          'Error fetching locations data from Open Meteo API.',
+        'Error fetching locations data from Open Meteo API.',
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getLocationFromCoords(lat: string, long: string): Promise<GeolocationResponse> {
+  async getLocationFromCoords(
+    lat: string,
+    long: string,
+  ): Promise<GeolocationResponse> {
     const apiKey = process.env.GEOCODING_API_KEY;
     if (!apiKey) {
       throw new HttpException(
@@ -65,7 +71,7 @@ export class LocationService {
       );
       const data = response.data;
 
-      return {location: data.address.city};
+      return { location: data.address.city };
     } catch (error) {
       throw new HttpException(
         error.response?.data ||

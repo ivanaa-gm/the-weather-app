@@ -9,7 +9,7 @@ const SettingsTab = ({ onClose }) => {
 
   return (
     <div
-      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 md:w-96 w-[22rem] flex flex-col gap-4"
+      className="absolute left-12 top-0 bg-black/90 border border-gray-600 rounded-xl shadow-xl p-4 md:w-96 w-[20rem] flex flex-col gap-4"
       ref={ref}
     >
       <div className="flex flex-col items-center gap-2">
@@ -66,7 +66,7 @@ const SettingsTab = ({ onClose }) => {
 
       <div className="flex flex-col items-center gap-2">
         <p>{t("windSpeed")}</p>
-        <div className="border rounded-lg flex flex-row">
+        <div className="border rounded-lg md:flex md:flex-row grid grid-cols-2 gap-2">
           <button
             className={`p-2 px-6 transition rounded-lg ${
               metrics.windSpeed === "kmh"

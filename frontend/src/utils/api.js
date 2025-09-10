@@ -1,5 +1,4 @@
 const BASE_URL = "http://localhost:3000";
-import { astrologyData } from "../../exampleData";
 
 export async function getLocationByGeolocation(lat, long) {
   const res = await fetch(
@@ -53,6 +52,3 @@ export async function getAstrology(lat, long) {
   return res.json();
 }
 
-export {
-  astrologyData
-};

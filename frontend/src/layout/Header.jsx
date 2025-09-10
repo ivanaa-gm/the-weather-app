@@ -1,5 +1,4 @@
 import { Search, Settings, Info } from "lucide-react";
-import { useRef, useEffect } from "react";
 import SettingsTab from "../components/tabs/SettingsTab";
 import SearchTab from "../components/tabs/SearchTab";
 import InfoTab from "../components/tabs/InfoTab";
@@ -10,7 +9,7 @@ const Header = ({ openTab, setOpenTab, onClose }) => {
   };
 
   return (
-    <div className="absolute left-0 top-0 z-[9999]">
+    <div className="absolute left-0 top-0 z-[9999] w-screen">
       <div className="p-2 text-white flex flex-col gap-2">
         <div className="relative">
           <div

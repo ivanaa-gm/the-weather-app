@@ -14,8 +14,6 @@ const MobileCarousel = ({
   dailyWeatherFutureDays = null,
   hourlyWeatherFutureDays = null,
   astrologyData = null,
-  openTab,
-  setOpenTab,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -94,7 +92,6 @@ const MobileCarousel = ({
         className="flex-1 flex overflow-x-auto snap-x snap-mandatory"
         onScroll={handleScroll}
       >
-        <Header openTab={openTab} setOpenTab={setOpenTab} />
         {cards.map((card, i) => (
           <div
             key={i}
