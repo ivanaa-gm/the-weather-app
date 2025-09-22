@@ -13,8 +13,8 @@ const InfoTab = ({ onClose }) => {
           creative design elements in a web application. I’ve always enjoyed
           playing with backgrounds, SVGs and animated icons and creating new
           ones when I couldn't find what I was looking for. Thanks to the
-          Weather Icons by Bas, I found the perfect set of icons that inspired
-          me to build the entire app.
+          <b>Weather Icons by Bas</b>, I found the perfect set of icons that
+          inspired me to build the entire app.
         </p>
         <br></br>
         <p>
@@ -22,20 +22,25 @@ const InfoTab = ({ onClose }) => {
           CSS for a smooth and modern user interface and Node.js + NestJS,
           serving as a proxy for external API calls. The APIs that I am using
           are Open Meteo for weather forecasts and location geocoding and
-          Stormglass for moon phase and astronomical data. Not only they are
-          free of charge, but also they serve thorough information that helped
-          me make the app useful. The backend fetches current weather updates at
-          half-hour intervals in order to provide accurate and timely
-          information. Since Stormglass API has a limited daily quota, I cache
-          the first day’s moon phase in memory. A new API call is only made if
-          the cached date is no longer current.
+          Stormglass for moon phase and astronomical data - free of charge and
+          serving thorough information that helped me make the app useful. The
+          backend fetches current weather updates at half-hour intervals in
+          order to provide accurate and timely information. Since Stormglass API
+          has a limited daily quota, I cache the first day’s moon phase in
+          memory. A new API call is only made if the cached date is no longer
+          current.
         </p>
         <br></br>
         <p>
-          Overall, this app combines both my interest in design and frontend
-          animations with my growing experience in backend development and API
-          integrations. It was a very fun project that helped me to improve both
-          my technical and creative skills.
+          Overall, this app was very fun to create because of desing and
+          animations but also I explored more in backend development and API
+          integrations.
+        </p>
+
+        <p>
+          <b>
+            Ivana
+          </b>
         </p>
       </div>
     </div>
