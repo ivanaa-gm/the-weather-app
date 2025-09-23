@@ -52,7 +52,7 @@ const MobileCarousel = ({
     Object.values(dailyWeatherFutureDays)
       .map((day) => day.weather_code)
       .forEach((code) => {
-        const details = getWeatherIconBackgroundAndDescription(code, true);
+        const details = getWeatherIconBackgroundAndDescription(code, isDay);
         iconsTitlesBackgrouds.push(details);
       });
 
