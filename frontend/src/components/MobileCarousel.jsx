@@ -14,6 +14,7 @@ const MobileCarousel = ({
   dailyWeatherFutureDays = null,
   hourlyWeatherFutureDays = null,
   astrologyData = null,
+  openTab = null,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -24,7 +25,8 @@ const MobileCarousel = ({
     !hourlyWeatherToday ||
     !dailyWeatherFutureDays ||
     !hourlyWeatherFutureDays ||
-    !astrologyData
+    !astrologyData ||
+    astrologyData.length < 7
   ) {
     cards = [
       ...Array.from({ length: 6 }, (_, i) => (
@@ -89,8 +91,10 @@ const MobileCarousel = ({
   return (
     <div className="h-full w-screen flex flex-col relative">
       <div
-        className="flex-1 flex overflow-x-auto snap-x snap-mandatory"
-        onScroll={handleScroll}
+        className={`flex-1 flex snap-x snap-mandatory ${
+          openTab ? "overflow-hidden" : "overflow-x-auto"
+        }`}
+        onScroll={!openTab ? handleScroll : undefined}
       >
         {cards.map((card, i) => (
           <div

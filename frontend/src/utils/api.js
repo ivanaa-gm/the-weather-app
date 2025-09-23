@@ -23,7 +23,6 @@ export async function getWeather(
   precipitationUnit
 ) {
   const url = `${BASE_URL}/weather?lat=${latitude}&long=${longitude}&timezone=${timezone}&windSpeedUnit=${windSpeedUnit}&temperatureUnit=${temperatureUnit}&precipitationUnit=${precipitationUnit}`;
-  console.log(url);
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch weather data");
   return res.json();
@@ -38,7 +37,6 @@ export async function getCurrentWeather(
   precipitationUnit
 ) {
   const url = `${BASE_URL}/weather/current?lat=${latitude}&long=${longitude}&timezone=${timezone}&windSpeedUnit=${windSpeedUnit}&temperatureUnit=${temperatureUnit}&precipitationUnit=${precipitationUnit}`;
-  console.log(url);
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch current weather data");
   return res.json();

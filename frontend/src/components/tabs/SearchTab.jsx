@@ -43,7 +43,7 @@ const SearchTab = ({ onClose }) => {
 
     if (query.length > 2 && results.length > 0) {
       return (
-        <div className="max-h-60 overflow-scroll bg-black/90 border border-gray-600 rounded-xl shadow-xl">
+        <div className="max-h-64 overflow-scroll z-[9999] bg-black/90 border border-gray-600 rounded-xl shadow-xl">
           {results.map((item, index) => (
             <div
               key={index}

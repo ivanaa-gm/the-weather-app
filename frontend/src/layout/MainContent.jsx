@@ -107,7 +107,6 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
           if (data) {
             setAstrology(data);
           }
-          console.log(astrology)
           // setAstrology(astrologyData);
         } catch (err) {
           console.log(err);
@@ -148,7 +147,8 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
           hourlyWeatherToday={weather?.hourlyWeatherToday || null}
           dailyWeatherFutureDays={weather?.dailyWeatherFutureDays || null}
           hourlyWeatherFutureDays={weather?.hourlyWeatherFutureDays || null}
-          astrologyData={astrology || []}
+          astrologyData={astrology}
+          openTab={openTab}
         />
       </div>
     </div>
