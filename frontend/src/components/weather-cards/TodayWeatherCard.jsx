@@ -6,7 +6,6 @@ import {
   secondsToHours,
 } from "../../utils/utils";
 import HourlyWeatherCard from "./HourlyWeatherCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../../contexts/MetricsContext";
 import PlaceInformation from "../PlaceInformation";
@@ -232,7 +231,6 @@ const TodayWeatherCard = ({
         </div>
       </div>
       <div className="flex overflow-x-auto mt-4">
-        <ChevronLeft />
         {Object.entries(futureHourlyWeather).map(([time, data]) => (
           <HourlyWeatherCard
             key={time}
@@ -249,7 +247,6 @@ const TodayWeatherCard = ({
             isToday={true}
           />
         ))}
-        <ChevronRight />
       </div>
     </div>
   );

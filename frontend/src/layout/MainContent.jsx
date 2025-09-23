@@ -14,37 +14,36 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
   const { locationData, setLocationData } = useLocation();
   const { metrics } = useMetrics();
 
+  const locationUnavailable = locationData.location === "unknown" || locationData.location === null;
+
   useEffect(() => {
+    if (locationUnavailable) return;
+
     const fetchWeather = async () => {
-      const locationDataLoaded =
-        locationData.latitude &&
-        locationData.longitude &&
-        locationData.timezoneString;
+      if (locationUnavailable) return;
 
-      if (locationDataLoaded) {
-        try {
-          const data = await getWeather(
-            locationData.latitude,
-            locationData.longitude,
-            locationData.timezoneString,
-            metrics.windSpeed,
-            metrics.temperature === "C" ? "celsius" : "fahrenheit",
-            metrics.precipitation
-          );
+      try {
+        const data = await getWeather(
+          locationData.latitude,
+          locationData.longitude,
+          locationData.timezoneString,
+          metrics.windSpeed,
+          metrics.temperature === "C" ? "celsius" : "fahrenheit",
+          metrics.precipitation
+        );
 
-          if (data) {
-            setWeather(data);
-            setCurrentWeather(data.currentWeather);
+        if (data) {
+          setWeather(data);
+          setCurrentWeather(data.currentWeather);
 
-            setLocationData({
-              ...locationData,
-              timezoneTerm: data.timezone,
-              elevation: data.elevation + "m",
-            });
-          }
-        } catch (err) {
-          console.log(err);
+          setLocationData({
+            ...locationData,
+            timezoneTerm: data.timezone,
+            elevation: data.elevation + "m",
+          });
         }
+      } catch (err) {
+        console.log(err);
       }
     };
 
@@ -54,18 +53,16 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
     locationData.longitude,
     locationData.timezoneString,
     metrics,
+    locationUnavailable,
   ]);
 
-  // todayCard gets fresh data every 30 mins
+  // current weather every 30 mins
   useEffect(() => {
-    const locationDataLoaded =
-      locationData.latitude &&
-      locationData.longitude &&
-      locationData.timezoneString;
-
-    if (!locationDataLoaded) return;
+    if (locationUnavailable) return;
 
     const fetchCurrent = async () => {
+      if (locationUnavailable) return;
+
       try {
         const data = await getCurrentWeather(
           locationData.latitude,
@@ -82,7 +79,6 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
     };
 
     fetchCurrent();
-
     const interval = setInterval(fetchCurrent, 30 * 60 * 1000);
 
     return () => clearInterval(interval);
@@ -91,31 +87,44 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
     locationData.longitude,
     locationData.timezoneString,
     metrics,
+    locationUnavailable,
   ]);
 
   useEffect(() => {
-    const fetchAstrology = async () => {
-      const locationDataLoaded =
-        locationData.latitude && locationData.longitude;
-      if (locationDataLoaded) {
-        try {
-          const data = await getAstrology(
-            locationData.latitude,
-            locationData.longitude
-          );
+    if (locationUnavailable) return;
 
-          if (data) {
-            setAstrology(data);
-          }
-          // setAstrology(astrologyData);
-        } catch (err) {
-          console.log(err);
+    const fetchAstrology = async () => {
+      if (locationUnavailable) return;
+
+      try {
+        const data = await getAstrology(
+          locationData.latitude,
+          locationData.longitude
+        );
+
+        if (data) {
+          setAstrology(data);
         }
+      } catch (err) {
+        console.log(err);
       }
     };
 
     fetchAstrology();
-  }, [locationData.latitude, locationData.longitude]);
+  }, [locationData.latitude, locationData.longitude, locationUnavailable]);
+
+  if (locationUnavailable) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-gray-700 text-center p-4">
+        <img src="error.gif" alt="Error" className="mb-4 w-16 h-16" />
+        <div>
+          Unable to catch your location. <br />
+          Please use the search bar to look up the city you want to see the
+          weather for.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -136,6 +145,9 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
             dailyWeatherFutureDays={weather?.dailyWeatherFutureDays || null}
             hourlyWeatherFutureDays={weather?.hourlyWeatherFutureDays || null}
             astrologyData={astrology?.slice(1) || []}
+            now={weather?.currentWeather.time}
+            sunrise={weather?.dailyWeatherToday.sunrise}
+            sunset={weather?.dailyWeatherToday.sunset}
           />
         </div>
       </div>
@@ -149,6 +161,7 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
           hourlyWeatherFutureDays={weather?.hourlyWeatherFutureDays || null}
           astrologyData={astrology}
           openTab={openTab}
+          locationUnavailable={locationUnavailable}
         />
       </div>
     </div>

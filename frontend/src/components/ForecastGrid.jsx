@@ -1,11 +1,14 @@
 import WeatherCard from "./weather-cards/WeatherCard";
-import { getWeatherIconBackgroundAndDescription } from "../utils/utils";
+import { getWeatherIconBackgroundAndDescription, isDaytime } from "../utils/utils";
 import { CircleLoader } from "react-spinners";
 
 const ForecastGrid = ({
   dailyWeatherFutureDays = null,
   hourlyWeatherFutureDays = null,
   astrologyData = null,
+  now = null,
+  sunrise = null,
+  sunset = null
 }) => {
   if (!dailyWeatherFutureDays || !hourlyWeatherFutureDays) {
     return (
@@ -24,11 +27,17 @@ const ForecastGrid = ({
     );
   }
 
+  const isDay = isDaytime(
+    now,
+    sunrise,
+    sunset
+  );
+
   const iconsTitlesBackgrouds = [];
   Object.values(dailyWeatherFutureDays)
     .map((day) => day.weather_code)
     .forEach((code) => {
-      const details = getWeatherIconBackgroundAndDescription(code, true);
+      const details = getWeatherIconBackgroundAndDescription(code, isDay);
       iconsTitlesBackgrouds.push(details);
     });
 
