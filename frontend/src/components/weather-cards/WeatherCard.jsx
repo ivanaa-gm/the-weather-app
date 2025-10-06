@@ -9,6 +9,7 @@ import HourlyWeatherCard from "./HourlyWeatherCard";
 import { CircleLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../../contexts/MetricsContext";
+import TemperatureChart from "../TemperatureChart";
 
 const WeatherCard = ({
   dailyWeather = null,
@@ -18,7 +19,7 @@ const WeatherCard = ({
   title = "",
   code = 0,
   background = "",
-  isDay=false
+  isDay = false,
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
@@ -37,6 +38,13 @@ const WeatherCard = ({
   const { weekday, day, month } = formatDate(dailyWeather.date);
   const windDirection = getWindDirection(dailyWeather.wind_speed_10m_max);
   const daylight = secondsToHours(dailyWeather.daylight_duration);
+
+  const hourlyTemperatures = Object.entries(hourlyWeather).map(
+    ([time, data]) => ({
+      time: time.slice(11),
+      temperature: data.temperature_2m,
+    })
+  );
 
   const astrologyBg = `bg-gifs/astrology.gif`;
   const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
@@ -168,6 +176,14 @@ const WeatherCard = ({
               </p>
             </div>
           </div>
+
+          <div className="bg-white/20 rounded-lg pr-2 pt-2">
+            <h2 className="text-center font font-semibold">
+              {t("temperatureChart")}
+            </h2>
+            <TemperatureChart data={hourlyTemperatures} isFutureDay={true} metric={metrics.temperature}/>
+          </div>
+
           <div
             className="flex flex-col w-full rounded-2xl my-2 p-2 ring-1 ring-white/20 ring-offset-0"
             style={{ backgroundImage: `url(${astrologyBg})` }}

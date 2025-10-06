@@ -9,6 +9,7 @@ import HourlyWeatherCard from "./HourlyWeatherCard";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../../contexts/MetricsContext";
 import PlaceInformation from "../PlaceInformation";
+import TemperatureChart from "../TemperatureChart";
 
 const TodayWeatherCard = ({
   currentWeather = null,
@@ -29,7 +30,18 @@ const TodayWeatherCard = ({
   const { weekday, day, month } = formatDate(dailyWeather.date);
   const windDirection = getWindDirection(currentWeather.wind_direction_10m);
   const daylight = secondsToHours(dailyWeather.daylight_duration);
-  const futureHourlyWeather = filterFutureHours(hourlyWeather, hourlyWeatherTomorrow);
+  const futureHourlyWeather = filterFutureHours(
+    hourlyWeather,
+    hourlyWeatherTomorrow
+  );
+  const hourlyTemperatures = Object.entries(hourlyWeather).map(
+    ([time, data]) => ({
+      time: time.slice(11),
+      temperature: data.temperature_2m,
+    })
+  );
+
+  console.log(hourlyTemperatures);
 
   const astrologyBg = `bg-gifs/astrology.gif`;
   const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
@@ -206,6 +218,12 @@ const TodayWeatherCard = ({
                 {t("m")}
               </p>
             </div>
+          </div>
+          <div className="bg-white/20 rounded-lg pr-2 pt-2">
+            <h2 className="text-center font font-semibold">
+              {t("temperatureChart")}
+            </h2>
+            <TemperatureChart data={hourlyTemperatures} metric={metrics.temperature}/>
           </div>
           <div
             className="flex flex-row justify-between w-full rounded-2xl p-2 ring-1 my-6 ring-white/20 ring-offset-0"

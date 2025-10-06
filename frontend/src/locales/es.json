@@ -106,5 +106,7 @@
     "capricorn": "Capricornio",
     "aquarius": "Acuario",
     "pisces": "Piscis"
-  }
+  },
+
+  "temperatureChart": "Tabla de Temperatura"
 }

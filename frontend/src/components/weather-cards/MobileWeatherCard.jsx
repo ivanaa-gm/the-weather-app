@@ -9,6 +9,7 @@ import HourlyWeatherCard from "./HourlyWeatherCard";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../../contexts/MetricsContext";
 import PlaceInformation from "../PlaceInformation";
+import TemperatureChart from "../TemperatureChart";
 
 const MobileWeatherCard = ({
   isToday = false,
@@ -36,7 +37,12 @@ const MobileWeatherCard = ({
   const futureHourlyWeather = isToday
     ? filterFutureHours(hourlyWeather, hourlyWeatherTomorrow)
     : null;
-
+  const hourlyTemperatures = Object.entries(hourlyWeather).map(
+    ([time, data]) => ({
+      time: time.slice(11),
+      temperature: data.temperature_2m,
+    })
+  );
   const astrologyBg = `bg-gifs/astrology.gif`;
   const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
   const zodiacSignImg = `/zodiac-signs/${astrologyData.zodiacSign}.png`;
@@ -247,6 +253,14 @@ const MobileWeatherCard = ({
               </p>
             </div>
           </div>
+
+          <div className="bg-white/20 rounded-lg pr-2 pt-2">
+            <h2 className="text-center font font-semibold">
+              {t("temperatureChart")}
+            </h2>
+            <TemperatureChart data={hourlyTemperatures} metric={metrics.temperature}/>
+          </div>
+
           <div
             className="flex flex-row my-6 rounded-2xl p-2 ring-1 ring-white/20 ring-offset-0"
             style={{ backgroundImage: `url(${astrologyBg})` }}
