@@ -19,8 +19,6 @@ const TodayWeatherCard = ({
   icon = "",
   code = 0,
   background = "",
-  isToday = true,
-  isDay=true
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
@@ -247,7 +245,8 @@ const TodayWeatherCard = ({
             windDirection={data.wind_direction_10m}
             cloudCover={data.cloud_cover}
             isToday={true}
-            isDay={isDay}
+            sunrise={dailyWeather.sunrise}
+            sunset={dailyWeather.sunset}
           />
         ))}
       </div>

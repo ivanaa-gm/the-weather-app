@@ -203,7 +203,8 @@ const WeatherCard = ({
             windDirection={data.wind_direction_10m}
             cloudCover={data.cloud_cover}
             isToday={false}
-            isDay={isDay}
+            sunrise={dailyWeather.sunrise}
+            sunset={dailyWeather.sunset}
           />
         ))}
       </div>

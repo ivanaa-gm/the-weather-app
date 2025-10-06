@@ -8,9 +8,7 @@ export class AstrologyController {
 
   @Get()
   async getAstrology(
-    @Query('lat') latitude: string,
-    @Query('long') longitude: string,
   ): Promise<AstrologyResponse[] | null> {
-    return this.astrologyService.getAstrology(latitude, longitude);
+    return this.astrologyService.getAstrology();
   }
 }

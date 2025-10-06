@@ -14,7 +14,8 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
   const { locationData, setLocationData } = useLocation();
   const { metrics } = useMetrics();
 
-  const locationUnavailable = locationData.location === "unknown" || locationData.location === null;
+  const locationUnavailable =
+    locationData.location === "unknown" || locationData.location === null;
 
   useEffect(() => {
     if (locationUnavailable) return;
@@ -97,10 +98,7 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
       if (locationUnavailable) return;
 
       try {
-        const data = await getAstrology(
-          locationData.latitude,
-          locationData.longitude
-        );
+        const data = await getAstrology();
 
         if (data) {
           setAstrology(data);
@@ -126,6 +124,8 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
     );
   }
 
+  console.log(astrology);
+
   return (
     <div
       className={`transition h-full duration-400 ${isBlurred ? "blur-sm" : ""}`}
@@ -136,7 +136,9 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
           <TodayCard
             dailyWeatherToday={weather?.dailyWeatherToday || null}
             hourlyWeatherToday={weather?.hourlyWeatherToday || null}
-            hourlyWeatherTomorrow={weather?.hourlyWeatherFutureDays.dayOne || null}
+            hourlyWeatherTomorrow={
+              weather?.hourlyWeatherFutureDays.dayOne || null
+            }
             currentWeather={currentWeather || weather?.currentWeather || null}
             astrologyData={astrology?.[0] || null}
           />

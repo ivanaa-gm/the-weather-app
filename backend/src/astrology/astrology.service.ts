@@ -1,76 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import * as SunCalc from 'suncalc';
 
 export interface AstrologyResponse {
   moonPhase: string;
-  moonrise: string;
-  moonset: string;
-  sign: string;
+  zodiacSign: string;
 }
 
 @Injectable()
 export class AstrologyService {
-  constructor(private httpService: HttpService) {}
+  async getAstrology(): Promise<AstrologyResponse[]> {
+    const today = new Date();
 
-  private cachedData: AstrologyResponse[] | null = null;
-  private cachedDate: string | null = null;
+    const days = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      return date;
+    });
 
-  async getAstrology(latitude: string, longitude: string): Promise<AstrologyResponse[] | null> {
-    const today = new Date().toISOString().split('T')[0];
+    return days.map((date) => {
+      const phase = SunCalc.getMoonIllumination(date).phase;
+      const moonPhase = this.getMoonPhaseText(phase);
+      const zodiacSign = this.getZodiacSign(date);
 
-    if (this.cachedData && this.cachedDate === today) {
-      return this.cachedData;
-    }
-
-    const apiKey = process.env.STORMGLASS_API_KEY;
-    if (!apiKey) {
-      throw new HttpException(
-        'API key not found.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-
-    const url = `https://api.stormglass.io/v2/astronomy/point?lat=${latitude}&lng=${longitude}`;
-    try {
-      const response = await firstValueFrom(
-        this.httpService.get(url, {
-          headers: { Authorization: apiKey },
-        }),
-      );
-
-      const data = response.data.data.slice(0, 7).map((item) => {
-        const date = item.time.split('T')[0];
-        const moonPhaseText = item.moonPhase.current.text;
-
-        const formattedMoonPhase = moonPhaseText
-          .replace(/([a-z])([A-Z])/g, '$1-$2')
-          .replace(/\s+/g, '-')
-          .toLowerCase();
-
-        const astronomicalDawnDate = item.astronomicalDawn.split('T')[0];
-
-        return {
-          moonPhase: formattedMoonPhase,
-          zodiacSign: this.getZodiacSign(date),
-          astronomicalDawn: astronomicalDawnDate,
-        };
-      });
-
-      this.cachedData = data;
-      this.cachedDate = data[0].astronomicalDawn;
-
-      return this.cachedData;
-    } catch (error) {
-      throw new HttpException(
-        error.response?.data || 'Error fetching data from Stormglass API',
-        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+      return { moonPhase, zodiacSign };
+    });
   }
 
-  getZodiacSign(date: string) {
+  private getMoonPhaseText(phase: number): string {
+  if (phase < 0.03 || phase > 0.97) return 'new-moon';
+  if (phase >= 0.03 && phase < 0.22) return 'waxing-crescent';
+  if (phase >= 0.22 && phase < 0.28) return 'first-quarter';
+  if (phase >= 0.28 && phase < 0.47) return 'waxing-gibbous';
+  if (phase >= 0.47 && phase <= 0.53) return 'full-moon';
+  if (phase > 0.53 && phase < 0.72) return 'waning-gibbous';
+  if (phase >= 0.72 && phase < 0.78) return 'last-quarter';
+  return 'waning-crescent';
+}
+
+
+  private getZodiacSign(date: Date): string {
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const formattedDate = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
     const zodiacSigns = [
       { sign: 'capricorn', start: '12-22', end: '01-19' },
       { sign: 'aquarius', start: '01-20', end: '02-18' },
@@ -85,8 +57,6 @@ export class AstrologyService {
       { sign: 'scorpio', start: '10-23', end: '11-21' },
       { sign: 'sagittarius', start: '11-22', end: '12-21' },
     ];
-    const [year, month, day] = date.split('-').map(Number);
-    const formattedDate = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
     for (const { sign, start, end } of zodiacSigns) {
       if (start <= end) {

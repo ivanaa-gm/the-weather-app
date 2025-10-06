@@ -62,11 +62,11 @@ const MobileCarousel = ({
         currentWeather={currentWeather}
         dailyWeather={dailyWeatherToday}
         hourlyWeather={hourlyWeatherToday}
+        hourlyWeatherTomorrow={hourlyWeatherFutureDays.dayOne}
         astrologyData={astrologyData[0]}
         icon={iconTitleBackground.svg}
         code={iconTitleBackground.code}
         background={iconTitleBackground.background}
-        isDay={isDay}
       />,
       ...Array.from({ length: 6 }, (_, i) => (
         <MobileWeatherCard
@@ -77,7 +77,6 @@ const MobileCarousel = ({
           icon={iconsTitlesBackgrouds[i].svg}
           code={iconsTitlesBackgrouds[i].code}
           background={iconsTitlesBackgrouds[i].background}
-          isDay={isDay}
         />
       )),
     ];

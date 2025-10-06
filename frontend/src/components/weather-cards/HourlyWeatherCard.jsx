@@ -2,6 +2,7 @@ import {
   getWeatherIconBackgroundAndDescription,
   getWindDirection,
   extractTime,
+  isDaytime
 } from "../../utils/utils";
 import { useTranslation } from "react-i18next";
 import { useMetrics } from "../../contexts/MetricsContext";
@@ -18,10 +19,17 @@ const HourlyWeatherCard = ({
   windDirection,
   cloudCover,
   isToday,
-  isDay
+  sunrise,
+  sunset
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
+
+  const isDay = isDaytime(
+    time,
+    sunrise,
+    sunset
+  );
 
   const iconAndTitle = getWeatherIconBackgroundAndDescription(
     weatherCode,

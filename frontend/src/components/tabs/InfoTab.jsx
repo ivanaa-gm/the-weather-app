@@ -21,15 +21,13 @@ const InfoTab = ({ onClose }) => {
           From a technical perspective the app is built with{" "}
           <b>React + Tailwind CSS</b> for a smooth and modern user interface and{" "}
           <b>Node.js + NestJS</b>, serving as a proxy for external API calls.
-          The APIs that I am using are <b>Open Meteo</b> for weather forecasts
-          and location geocoding and <b>Stormglass</b> for moon phase and
-          astronomical data - both are free of charge and serving thorough
-          information that helped me make the app useful. The backend fetches
-          current weather updates at half-hour intervals in order to provide
-          accurate and timely information. Since Stormglass API has a limited
-          daily quota, I call the API on load and then cache the moon phase in
-          memory for the rest of the day. A new API call is only made if the
-          cached date is no longer current.
+          The API that I am using is <b>Open Meteo</b> for weather forecasts and
+          location geocoding - it's free of charge and serving thorough
+          information that helped me make the app useful. Moon phase and
+          astronomical data are calculated locally using the <b>SunCalc</b>{" "}
+          library. The backend fetches current weather updates at
+          half-hour intervals in order to provide accurate and timely
+          information.
         </p>
         <br />
         <p>

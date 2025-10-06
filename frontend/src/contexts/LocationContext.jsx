@@ -18,8 +18,6 @@ export const LocationsProvider = ({ children }) => {
     navigator.geolocation.getCurrentPosition(async (pos) => {
       const latitude = pos.coords.latitude;
       const longitude = pos.coords.longitude;
-      console.log(latitude);
-      console.log(longitude);
 
       try {
         const data = await getLocationByGeolocation(latitude, longitude);

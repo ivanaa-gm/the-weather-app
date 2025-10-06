@@ -15,11 +15,12 @@ const MobileWeatherCard = ({
   currentWeather = null,
   dailyWeather = null,
   hourlyWeather = null,
+  hourlyWeatherTomorrow = null,
   astrologyData = null,
   icon = "",
   code = 0,
   background = "",
-  isDay=false
+  isDay = false,
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
@@ -32,7 +33,9 @@ const MobileWeatherCard = ({
     ? getWindDirection(currentWeather.wind_direction_10m)
     : getWindDirection(dailyWeather.wind_speed_10m_max);
   const daylight = secondsToHours(dailyWeather.daylight_duration);
-  const futureHourlyWeather = isToday ? filterFutureHours(hourlyWeather) : null;
+  const futureHourlyWeather = isToday
+    ? filterFutureHours(hourlyWeather, hourlyWeatherTomorrow)
+    : null;
 
   const astrologyBg = `bg-gifs/astrology.gif`;
   const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
@@ -283,7 +286,8 @@ const MobileWeatherCard = ({
                 windDirection={data.wind_direction_10m}
                 cloudCover={data.cloud_cover}
                 isToday={true}
-                isDay={isDay}
+                sunrise={dailyWeather.sunrise}
+                sunset={dailyWeather.sunset}
               />
             ))
           : Object.entries(hourlyWeather).map(([time, data]) => (
@@ -300,7 +304,8 @@ const MobileWeatherCard = ({
                 windDirection={data.wind_direction_10m}
                 cloudCover={data.cloud_cover}
                 isToday={true}
-                isDay={isDay}
+                sunrise={dailyWeather.sunrise}
+                sunset={dailyWeather.sunset}
               />
             ))}
       </div>

@@ -46,7 +46,6 @@ const TodayCard = ({
         code={iconTitleBackground.code}
         background={iconTitleBackground.background}
         isToday={true}
-        isDay={isDay}
       />
     </div>
   );

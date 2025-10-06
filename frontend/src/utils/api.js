@@ -42,9 +42,9 @@ export async function getCurrentWeather(
   return res.json();
 }
 
-export async function getAstrology(lat, long) {
+export async function getAstrology() {
   const res = await fetch(
-    `${BASE_URL}/astrology?lat=${lat}&long=${long}`
+    `${BASE_URL}/astrology`
   );
   if (!res.ok) throw new Error("Failed to fetch astrology data");
   return res.json();
