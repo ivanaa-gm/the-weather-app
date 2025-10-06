@@ -18,6 +18,7 @@ const WeatherCard = ({
   title = "",
   code = 0,
   background = "",
+  isDay=false
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
@@ -202,6 +203,7 @@ const WeatherCard = ({
             windDirection={data.wind_direction_10m}
             cloudCover={data.cloud_cover}
             isToday={false}
+            isDay={isDay}
           />
         ))}
       </div>

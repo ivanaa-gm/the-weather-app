@@ -55,6 +55,7 @@ const ForecastGrid = ({
             icon={iconsTitlesBackgrouds[i].svg}
             code={iconsTitlesBackgrouds[i].code}
             background={iconsTitlesBackgrouds[i].background}
+            isDay={isDay}
           />
         </div>
       ))}

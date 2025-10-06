@@ -136,6 +136,7 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
           <TodayCard
             dailyWeatherToday={weather?.dailyWeatherToday || null}
             hourlyWeatherToday={weather?.hourlyWeatherToday || null}
+            hourlyWeatherTomorrow={weather?.hourlyWeatherFutureDays.dayOne || null}
             currentWeather={currentWeather || weather?.currentWeather || null}
             astrologyData={astrology?.[0] || null}
           />

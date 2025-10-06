@@ -18,13 +18,14 @@ const HourlyWeatherCard = ({
   windDirection,
   cloudCover,
   isToday,
+  isDay
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
 
   const iconAndTitle = getWeatherIconBackgroundAndDescription(
     weatherCode,
-    true
+    isDay
   );
   const imgPath = `/weather-icons/${iconAndTitle.svg}.svg`;
   const windDirectionString = getWindDirection(windDirection);
@@ -54,6 +55,13 @@ const HourlyWeatherCard = ({
       >
         {temperature}°{metrics.temperature}
       </p>
+      <h1 className={
+          isToday
+            ? "text-xl text-center font-bold"
+            : "text-md text-center font-bold"
+        }>
+        {t(`weatherCodes.${weatherCode}`)}
+      </h1>
       <p className={isToday ? "text-xl" : "text-lg"}>{iconAndTitle.title}</p>
       <p className="text-black/80 text-center">
         {t("apparent")} {apparentTemperature}°{metrics.temperature}

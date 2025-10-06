@@ -14,11 +14,13 @@ const TodayWeatherCard = ({
   currentWeather = null,
   dailyWeather = null,
   hourlyWeather = null,
+  hourlyWeatherTomorrow = null,
   astrologyData = null,
   icon = "",
   code = 0,
   background = "",
   isToday = true,
+  isDay=true
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
@@ -29,7 +31,7 @@ const TodayWeatherCard = ({
   const { weekday, day, month } = formatDate(dailyWeather.date);
   const windDirection = getWindDirection(currentWeather.wind_direction_10m);
   const daylight = secondsToHours(dailyWeather.daylight_duration);
-  const futureHourlyWeather = filterFutureHours(hourlyWeather);
+  const futureHourlyWeather = filterFutureHours(hourlyWeather, hourlyWeatherTomorrow);
 
   const astrologyBg = `bg-gifs/astrology.gif`;
   const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
@@ -245,6 +247,7 @@ const TodayWeatherCard = ({
             windDirection={data.wind_direction_10m}
             cloudCover={data.cloud_cover}
             isToday={true}
+            isDay={isDay}
           />
         ))}
       </div>

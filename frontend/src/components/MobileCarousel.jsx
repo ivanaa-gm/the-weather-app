@@ -66,6 +66,7 @@ const MobileCarousel = ({
         icon={iconTitleBackground.svg}
         code={iconTitleBackground.code}
         background={iconTitleBackground.background}
+        isDay={isDay}
       />,
       ...Array.from({ length: 6 }, (_, i) => (
         <MobileWeatherCard
@@ -76,6 +77,7 @@ const MobileCarousel = ({
           icon={iconsTitlesBackgrouds[i].svg}
           code={iconsTitlesBackgrouds[i].code}
           background={iconsTitlesBackgrouds[i].background}
+          isDay={isDay}
         />
       )),
     ];

@@ -43,7 +43,7 @@ function getWeatherIconBackgroundAndDescription(weatherCode, isDay) {
     71: { svg: "light-snow", title: "Slight Snow", background: "snow" },
     73: { svg: "snow", title: "Moderate Snow", background: "snow" },
     75: { svg: "snow", title: "Heavy Snow", background: "snow" },
-    77: { svg: "hail", title: "Snow grains", background: "hail" },
+    77: { svg: "snow", title: "Snow grains", background: "hail" },
     80: {
       svg: "slight-rain",
       title: "Slight Rain Showers",
@@ -134,18 +134,22 @@ function getWindDirection(degrees) {
   return directions[index].toLowerCase();
 }
 
-function filterFutureHours(hourlyWeather) {
+function filterFutureHours(hourlyWeather, hourlyWeatherTomorrow) {
   const now = new Date();
   let currentHour = now.getHours();
-
-  if (currentHour > 18) {
-    currentHour = 17;
-  }
 
   const futureEntries = Object.entries(hourlyWeather).filter(([time]) => {
     const entryHour = new Date(time).getHours();
     return entryHour > currentHour;
   });
+
+  if (futureEntries.length < 4 && hourlyWeatherTomorrow) {
+    const tomorrowEntries = Object.entries(hourlyWeatherTomorrow).slice(
+      0,
+      4 - futureEntries.length
+    );
+    futureEntries.push(...tomorrowEntries);
+  }
 
   return Object.fromEntries(futureEntries);
 }
@@ -169,6 +173,10 @@ function formatCoordinates(coord) {
   const degrees = Math.floor(coord);
   const minutes = Math.floor((coord - degrees) * 60);
   return `${degrees}°${minutes}'`;
+}
+
+function getNextDayHourlyWeatherCards() {
+  const now = new Date(currentTimeISO);
 }
 
 export {

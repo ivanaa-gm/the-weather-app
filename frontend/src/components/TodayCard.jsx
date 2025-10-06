@@ -9,6 +9,7 @@ const TodayCard = ({
   currentWeather = null,
   dailyWeatherToday = null,
   hourlyWeatherToday = null,
+  hourlyWeatherTomorrow = null,
   astrologyData = null
 }) => {
   if (!currentWeather || !dailyWeatherToday || !hourlyWeatherToday || !astrologyData) {
@@ -39,11 +40,13 @@ const TodayCard = ({
         currentWeather={currentWeather}
         dailyWeather={dailyWeatherToday}
         hourlyWeather={hourlyWeatherToday}
+        hourlyWeatherTomorrow={hourlyWeatherTomorrow}
         astrologyData={astrologyData}
         icon={iconTitleBackground.svg}
         code={iconTitleBackground.code}
         background={iconTitleBackground.background}
         isToday={true}
+        isDay={isDay}
       />
     </div>
   );

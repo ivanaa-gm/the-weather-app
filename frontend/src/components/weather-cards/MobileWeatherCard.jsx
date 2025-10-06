@@ -19,6 +19,7 @@ const MobileWeatherCard = ({
   icon = "",
   code = 0,
   background = "",
+  isDay=false
 }) => {
   const { t, i18n } = useTranslation();
   const { metrics } = useMetrics();
@@ -282,6 +283,7 @@ const MobileWeatherCard = ({
                 windDirection={data.wind_direction_10m}
                 cloudCover={data.cloud_cover}
                 isToday={true}
+                isDay={isDay}
               />
             ))
           : Object.entries(hourlyWeather).map(([time, data]) => (
@@ -298,6 +300,7 @@ const MobileWeatherCard = ({
                 windDirection={data.wind_direction_10m}
                 cloudCover={data.cloud_cover}
                 isToday={true}
+                isDay={isDay}
               />
             ))}
       </div>
