@@ -1,17 +1,22 @@
 import TodayCard from "../components/TodayCard";
 import ForecastGrid from "../components/ForecastGrid";
 import MobileCarousel from "../components/MobileCarousel";
-import { getWeather, getCurrentWeather, getAstrology } from "../utils/api";
+import {
+  getWeather,
+  getCurrentWeather,
+  getAstrology,
+  checkBackendHealth,
+} from "../utils/api";
 import { useMetrics } from "../contexts/MetricsContext";
 import { useState, useEffect } from "react";
 import { useLocation } from "../contexts/LocationContext";
 import { CircleLoader } from "react-spinners";
 
-
 const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
   const [weather, setWeather] = useState(null);
   const [astrology, setAstrology] = useState(null);
   const [currentWeather, setCurrentWeather] = useState(null);
+  const [backendAlive, setBackendAlive] = useState(false);
 
   const { locationData, setLocationData, loading } = useLocation();
 
@@ -114,16 +119,26 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
     fetchAstrology();
   }, [locationData.latitude, locationData.longitude, locationUnavailable]);
 
-  if (loading) {
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const isAlive = await checkBackendHealth();
+      setBackendAlive(isAlive);
+      if (isAlive) clearInterval(interval);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (backendAlive === false) {
     return (
       <div
         className={`flex flex-col items-center justify-center text-gray-700 text-center p-4 transition h-full duration-400 ${
           isBlurred ? "blur-sm" : ""
         }`}
       >
-        <div className="flex flex-col h-full w-full items-center justify-center">
-          <CircleLoader color="#2cceff" size={70} />
-          <div>Detecting your location...</div>
+        <div className="flex flex-col h-full w-full items-center justify-center gap-2">
+          <img src="server-loading.gif" className="h-20"/>
+          <div>The server is waking up, please wait a few seconds...</div>
         </div>
       </div>
     );
@@ -147,7 +162,20 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
     );
   }
 
-  console.log(astrology);
+  if (loading) {
+    return (
+      <div
+        className={`flex flex-col items-center justify-center text-gray-700 text-center p-4 transition h-full duration-400 ${
+          isBlurred ? "blur-sm" : ""
+        }`}
+      >
+        <div className="flex flex-col h-full w-full items-center justify-center gap-2">
+          <img src="location-pin.gif" className="h-20"/>
+          <div>Detecting your location...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
