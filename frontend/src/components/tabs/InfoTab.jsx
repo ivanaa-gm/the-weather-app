@@ -25,9 +25,8 @@ const InfoTab = ({ onClose }) => {
           location geocoding - it's free of charge and serving thorough
           information that helped me make the app useful. Moon phase and
           astronomical data are calculated locally using the <b>SunCalc</b>{" "}
-          library. The backend fetches current weather updates at
-          half-hour intervals in order to provide accurate and timely
-          information.
+          library. The backend fetches current weather updates at half-hour
+          intervals in order to provide accurate and timely information.
         </p>
         <br />
         <p>
@@ -37,6 +36,28 @@ const InfoTab = ({ onClose }) => {
           setup.
         </p>
         <br />
+        <p>
+          <h2>Attibutions:</h2> 
+          Icons by {" "}
+          <a
+            href="https://lordicon.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#2cceff] transition duration-100"
+          >
+            Lordicon.com
+          </a>
+          <br/>
+          <a
+            href="https://bas.dev/work/meteocons"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#2cceff] transition duration-100"
+          >
+            Weather Icons by Bas
+          </a>
+        </p>
+        <br/>
         <p>
           Overall, this app was very fun to create because of desing and
           animations but also I explored more in backend development and API
