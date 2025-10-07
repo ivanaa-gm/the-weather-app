@@ -41,8 +41,6 @@ const TodayWeatherCard = ({
     })
   );
 
-  console.log(hourlyTemperatures);
-
   const astrologyBg = `bg-gifs/astrology.gif`;
   const moonPhaseImg = `/moon-phases/${astrologyData.moonPhase}.png`;
   const zodiacSignImg = `/zodiac-signs/${astrologyData.zodiacSign}.png`;

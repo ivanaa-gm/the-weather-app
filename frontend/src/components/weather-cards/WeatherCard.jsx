@@ -1,7 +1,6 @@
 import {
   formatDate,
   getWindDirection,
-  filterFutureHours,
   extractTime,
   secondsToHours,
 } from "../../utils/utils";
@@ -178,7 +177,7 @@ const WeatherCard = ({
           </div>
 
           <div className="bg-white/20 rounded-lg pr-2 pt-2">
-            <h2 className="text-center font font-semibold">
+            <h2 className="text-center font font-semibold text-sm">
               {t("temperatureChart")}
             </h2>
             <TemperatureChart data={hourlyTemperatures} isFutureDay={true} metric={metrics.temperature}/>

@@ -5,17 +5,20 @@ import { getWeather, getCurrentWeather, getAstrology } from "../utils/api";
 import { useMetrics } from "../contexts/MetricsContext";
 import { useState, useEffect } from "react";
 import { useLocation } from "../contexts/LocationContext";
+import { CircleLoader } from "react-spinners";
+
 
 const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
   const [weather, setWeather] = useState(null);
   const [astrology, setAstrology] = useState(null);
   const [currentWeather, setCurrentWeather] = useState(null);
 
-  const { locationData, setLocationData } = useLocation();
+  const { locationData, setLocationData, loading } = useLocation();
+
   const { metrics } = useMetrics();
 
   const locationUnavailable =
-    locationData.location === "unknown" || locationData.location === null;
+    locationData.location === "unknown" || !locationData.location;
 
   useEffect(() => {
     if (locationUnavailable) return;
@@ -111,9 +114,29 @@ const MainContent = ({ openTab, setOpenTab, isBlurred }) => {
     fetchAstrology();
   }, [locationData.latitude, locationData.longitude, locationUnavailable]);
 
+  if (loading) {
+    return (
+      <div
+        className={`flex flex-col items-center justify-center text-gray-700 text-center p-4 transition h-full duration-400 ${
+          isBlurred ? "blur-sm" : ""
+        }`}
+      >
+        <div className="flex flex-col h-full w-full items-center justify-center">
+          <CircleLoader color="#2cceff" size={70} />
+          <div>Detecting your location...</div>
+        </div>
+      </div>
+    );
+  }
+
   if (locationUnavailable) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-gray-700 text-center p-4">
+      <div
+        className={`flex flex-col items-center justify-center text-gray-700 text-center p-4 transition h-full duration-400 ${
+          isBlurred ? "blur-sm" : ""
+        }`}
+        onClick={() => setOpenTab(null)}
+      >
         <img src="error.gif" alt="Error" className="mb-4 w-16 h-16" />
         <div>
           Unable to catch your location. <br />

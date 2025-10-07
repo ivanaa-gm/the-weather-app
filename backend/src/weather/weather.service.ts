@@ -359,10 +359,10 @@ export class WeatherService {
 
   markWindy(obj: any, unit: 'ms' | 'kmh' | 'mph' | 'kn'): any {
     const thresholds = {
-      ms: 14,
-      kmh: 40,
-      mph: 24,
-      kn: 22,
+      ms: 24.5,
+      kmh: 89,
+      mph: 55,
+      kn: 48,
     };
 
     if (Array.isArray(obj)) {

@@ -59,7 +59,7 @@ export class LocationService {
     const apiKey = process.env.GEOCODING_API_KEY;
     if (!apiKey) {
       throw new HttpException(
-        'API key not found. ',
+        'API key not found.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -70,8 +70,11 @@ export class LocationService {
         this.httpService.get(geolocationApi),
       );
       const data = response.data;
+      const address = data.address;
 
-      return { location: data.address.city };
+      const locationName = this.pickLocationName(address);
+
+      return { location: locationName };
     } catch (error) {
       throw new HttpException(
         error.response?.data ||
@@ -79,5 +82,25 @@ export class LocationService {
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  private pickLocationName(address: any): string {
+    if (!address) return 'unknown';
+    const keys = [
+      'city',
+      'town',
+      'village',
+      'municipality',
+      'county',
+      'state',
+      'region',
+      'country',
+    ];
+    for (let key of keys) {
+      if (address[key]) {
+        return address[key];
+      }
+    }
+    return address.display_name || 'unknown';
   }
 }
